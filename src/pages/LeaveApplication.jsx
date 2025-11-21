@@ -1,31 +1,43 @@
 // src/pages/LeaveApplication.jsx
 import React, { useState, useRef } from "react";
-import { supabase } from "../utils/supabase"; // make sure supabase client is setup
+import { supabase } from "../utils/supabase"; 
+// Import the new professional CSS
+import "../styles/LeaveApplication-new.css";
+
+// --- Icons ---
+const Icon = ({ path, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    className={`icon ${className}`}
+  >
+    <path fillRule="evenodd" d={path} clipRule="evenodd" />
+  </svg>
+);
+
+const ICONS = {
+  user: "M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z",
+  calendar: "M5.25 2.25a.75.75 0 00-1.5 0v1.5h-1.5a2.25 2.25 0 00-2.25 2.25v10.5a2.25 2.25 0 002.25 2.25h13.5a2.25 2.25 0 002.25-2.25v-10.5a2.25 2.25 0 00-2.25-2.25h-1.5v-1.5a.75.75 0 00-1.5 0v1.5h-6v-1.5z",
+  phone: "M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z",
+  upload: "M9.97 4.97a.75.75 0 011.06 0l3 3a.75.75 0 01-1.06 1.06l-1.72-1.72v7.94a.75.75 0 01-1.5 0v-7.94L8.97 9.03a.75.75 0 01-1.06-1.06l3-3zM3.75 12.75A.75.75 0 013 12V8.75a.75.75 0 011.5 0V12a.75.75 0 01-.75.75zM12 12.75a.75.75 0 01-.75-.75V8.75a.75.75 0 011.5 0V12a.75.75 0 01-.75.75zM16.25 12.75a.75.75 0 01-.75-.75V8.75a.75.75 0 011.5 0V12a.75.75 0 01-.75.75zM4 17a1 1 0 01-1-1v-2.25a.75.75 0 011.5 0v2.25a.25.25 0 00.25.25h10.5a.25.25 0 00.25-.25v-2.25a.75.75 0 011.5 0V16a1 1 0 01-1 1H4z",
+  send: "M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.086l-1.414 4.926a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.897 28.897 0 003.105 2.289z",
+  check: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z",
+};
 
 export default function LeaveApplication() {
   const [formData, setFormData] = useState({
-    name: "",
-    rollNumber: "",
-    branch: "",
-    year: "",
-    semester: "",
-    hostelName: "",
-    roomNumber: "",
-    date: "",
-    time: "",
-    reason: "",
-    studentMobile: "",
-    parentMobile: "",
-    informedAdvisor: "",
-    advisorName: "",
-    advisorMobile: "",
-    studentSignature: null,
+    name: "", rollNumber: "", branch: "", year: "", semester: "",
+    hostelName: "", roomNumber: "", date: "", time: "", reason: "",
+    studentMobile: "", parentMobile: "", informedAdvisor: "",
+    advisorName: "", advisorMobile: "", studentSignature: null,
   });
 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const studentSignatureRef = useRef(null);
 
+  // --- Logic remains 100% UNCHANGED ---
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     setFormData({
@@ -37,50 +49,25 @@ export default function LeaveApplication() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       let signatureUrl = null;
-
       if (formData.studentSignature) {
         const file = formData.studentSignature;
         const filePath = `signatures/${Date.now()}_${file.name}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from("leave-signatures")
-          .upload(filePath, file);
-
+        const { error: uploadError } = await supabase.storage.from("leave-signatures").upload(filePath, file);
         if (uploadError) throw uploadError;
-
-        const { data: publicUrlData } = supabase.storage
-          .from("leave-signatures")
-          .getPublicUrl(filePath);
-
+        const { data: publicUrlData } = supabase.storage.from("leave-signatures").getPublicUrl(filePath);
         signatureUrl = publicUrlData.publicUrl;
       }
-
-      const { error } = await supabase.from("leave_applications").insert([
-        {
-          name: formData.name,
-          roll_number: formData.rollNumber,
-          branch: formData.branch,
-          year: formData.year,
-          semester: formData.semester,
-          hostel_name: formData.hostelName,
-          room_number: formData.roomNumber,
-          date_of_stay: formData.date,
-          time: formData.time,
-          reason: formData.reason,
-          student_mobile: formData.studentMobile,
-          parent_mobile: formData.parentMobile,
-          informed_advisor: formData.informedAdvisor,
-          advisor_name: formData.advisorName || null,
-          advisor_mobile: formData.advisorMobile || null,
-          student_signature_url: signatureUrl,
-        },
-      ]);
-
+      const { error } = await supabase.from("leave_applications").insert([{
+        name: formData.name, roll_number: formData.rollNumber, branch: formData.branch,
+        year: formData.year, semester: formData.semester, hostel_name: formData.hostelName,
+        room_number: formData.roomNumber, date_of_stay: formData.date, time: formData.time,
+        reason: formData.reason, student_mobile: formData.studentMobile, parent_mobile: formData.parentMobile,
+        informed_advisor: formData.informedAdvisor, advisor_name: formData.advisorName || null,
+        advisor_mobile: formData.advisorMobile || null, student_signature_url: signatureUrl,
+      }]);
       if (error) throw error;
-
       setSubmitted(true);
     } catch (err) {
       console.error("Submission failed:", err.message);
@@ -92,39 +79,28 @@ export default function LeaveApplication() {
 
   const resetForm = () => {
     setFormData({
-      name: "",
-      rollNumber: "",
-      branch: "",
-      year: "",
-      semester: "",
-      hostelName: "",
-      roomNumber: "",
-      date: "",
-      time: "",
-      reason: "",
-      studentMobile: "",
-      parentMobile: "",
-      informedAdvisor: "",
-      advisorName: "",
-      advisorMobile: "",
-      studentSignature: null,
+      name: "", rollNumber: "", branch: "", year: "", semester: "",
+      hostelName: "", roomNumber: "", date: "", time: "", reason: "",
+      studentMobile: "", parentMobile: "", informedAdvisor: "",
+      advisorName: "", advisorMobile: "", studentSignature: null,
     });
-    if (studentSignatureRef.current) {
-      studentSignatureRef.current.value = "";
-    }
+    if (studentSignatureRef.current) studentSignatureRef.current.value = "";
     setSubmitted(false);
   };
+  // --- End Logic ---
 
   if (submitted) {
     return (
-      <div className="leave-container">
-        <div className="success-message">
-          <h2>Application Submitted Successfully!</h2>
-          <p>Your permission request has been submitted for review.</p>
-          <p>
-            Please note: This form must be submitted at least two hours before
-            the start of class at the Hostel Office.
-          </p>
+      <div className="leave-page">
+        <div className="leave-card success-card">
+          <div className="success-icon-wrapper">
+            <Icon path={ICONS.check} />
+          </div>
+          <h2>Application Submitted!</h2>
+          <p>Your request has been successfully submitted for review.</p>
+          <div className="success-note">
+            Please note: Approvals usually take 24 hours. Check your status in the dashboard.
+          </div>
           <button className="submit-btn" onClick={resetForm}>
             Submit Another Request
           </button>
@@ -132,481 +108,165 @@ export default function LeaveApplication() {
       </div>
     );
   }
+
   return (
-    <div className="leave-container">
-      <div className="header-section">
-        <h2>PERMISSION FORM - STAY IN HOSTEL DURING COLLEGE HOURS</h2>
-        <p className="note">Note: This form must be submitted at least two hours before the start of class at Hostel Office.</p>
-      </div>
-      
-      <form className="leave-form" onSubmit={handleSubmit}>
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="name">1. Name: *</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
+    <div className="leave-page">
+      <div className="leave-card">
+        <div className="leave-header">
+          <h2>Permission Form</h2>
+          <p>Stay in Hostel During College Hours</p>
+        </div>
+
+        <form className="leave-form" onSubmit={handleSubmit}>
           
-          <div className="form-group">
-            <label htmlFor="rollNumber">2. Roll Number: *</label>
-            <input
-              type="text"
-              id="rollNumber"
-              name="rollNumber"
-              value={formData.rollNumber}
-              onChange={handleChange}
-              required
-            />
+          {/* Section 1: Student Details */}
+          <div className="form-section-title">
+            <Icon path={ICONS.user} className="section-icon" /> 
+            Student Details
           </div>
-        </div>
-        
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="branch">3. Branch: *</label>
-            <input
-              type="text"
-              id="branch"
-              name="branch"
-              value={formData.branch}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="year">Year: *</label>
-            <select
-              id="year"
-              name="year"
-              value={formData.year}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Year</option>
-              <option value="1st">1st Year</option>
-              <option value="2nd">2nd Year</option>
-              <option value="3rd">3rd Year</option>
-              <option value="4th">4th Year</option>
-            </select>
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="semester">Semester: *</label>
-            <select
-              id="semester"
-              name="semester"
-              value={formData.semester}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Semester</option>
-              <option value="1">Semester 1</option>
-              <option value="2">Semester 2</option>
-              <option value="3">Semester 3</option>
-              <option value="4">Semester 4</option>
-              <option value="5">Semester 5</option>
-              <option value="6">Semester 6</option>
-              <option value="7">Semester 7</option>
-              <option value="8">Semester 8</option>
-            </select>
-          </div>
-        </div>
-        
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="hostelName">4. Hostel Name: *</label>
-            <select
-              id="hostelName"
-              name="hostelName"
-              value={formData.hostelName}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Hostel</option>
-              <option value="Hostel A">Dheeran</option>
-              <option value="Hostel B">Ponnar</option>
-              <option value="Hostel C">Sankar</option>
-              <option value="Hostel D">Valluvar</option>
-              <option value="Hostel E">Bharathi</option>
-            </select>
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="roomNumber">5. Room Number: *</label>
-            <input
-              type="text"
-              id="roomNumber"
-              name="roomNumber"
-              value={formData.roomNumber}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-        
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="date">6. Date of Stay: *</label>
-            <input
-              type="date"
-              id="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="time">Time: *</label>
-            <input
-              type="time"
-              id="time"
-              name="time"
-              value={formData.time}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-        
-        <div className="form-group full-width">
-          <label htmlFor="reason">7. Reason for Staying in Hostel during College Hours: *</label>
-          <textarea
-            id="reason"
-            name="reason"
-            value={formData.reason}
-            onChange={handleChange}
-            rows="4"
-            placeholder="Please provide a detailed reason for your request..."
-            required
-          ></textarea>
-        </div>
-        
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="studentMobile">8. Student Mobile Number: *</label>
-            <input
-              type="tel"
-              id="studentMobile"
-              name="studentMobile"
-              value={formData.studentMobile}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="parentMobile">9. Parent's Mobile Number: *</label>
-            <input
-              type="tel"
-              id="parentMobile"
-              name="parentMobile"
-              value={formData.parentMobile}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-        
-        <div className="form-group">
-          <label>10. Informed to Class Advisor about Leave: *</label>
-          <div className="radio-group">
-            <label>
-              <input
-                type="radio"
-                name="informedAdvisor"
-                value="yes"
-                checked={formData.informedAdvisor === "yes"}
-                onChange={handleChange}
-                required
-              />
-              Yes
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="informedAdvisor"
-                value="no"
-                checked={formData.informedAdvisor === "no"}
-                onChange={handleChange}
-              />
-              No
-            </label>
-          </div>
-        </div>
-        
-        {formData.informedAdvisor === "yes" && (
-          <div className="form-row">
+          <div className="form-grid">
             <div className="form-group">
-              <label htmlFor="advisorName">11. Class Advisor Name:</label>
-              <input
-                type="text"
-                id="advisorName"
-                name="advisorName"
-                value={formData.advisorName}
-                onChange={handleChange}
-              />
+              <label htmlFor="name">Name *</label>
+              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter full name" />
             </div>
-            
             <div className="form-group">
-              <label htmlFor="advisorMobile">Mobile No.:</label>
-              <input
-                type="tel"
-                id="advisorMobile"
-                name="advisorMobile"
-                value={formData.advisorMobile}
-                onChange={handleChange}
-              />
+              <label htmlFor="rollNumber">Roll Number *</label>
+              <input type="text" id="rollNumber" name="rollNumber" value={formData.rollNumber} onChange={handleChange} required placeholder="e.g., 21CSR001" />
+            </div>
+            <div className="form-group">
+              <label htmlFor="branch">Branch *</label>
+              <input type="text" id="branch" name="branch" value={formData.branch} onChange={handleChange} required placeholder="e.g., CSE" />
+            </div>
+            <div className="form-group">
+              <label htmlFor="year">Year *</label>
+              <select id="year" name="year" value={formData.year} onChange={handleChange} required>
+                <option value="">Select Year</option>
+                <option value="1st">1st Year</option>
+                <option value="2nd">2nd Year</option>
+                <option value="3rd">3rd Year</option>
+                <option value="4th">4th Year</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="semester">Semester *</label>
+              <select id="semester" name="semester" value={formData.semester} onChange={handleChange} required>
+                <option value="">Select Semester</option>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="hostelName">Hostel Name *</label>
+              <select id="hostelName" name="hostelName" value={formData.hostelName} onChange={handleChange} required>
+                <option value="">Select Hostel</option>
+                {["Dheeran", "Ponnar", "Sankar", "Valluvar", "Bharathi"].map(h => <option key={h} value={h}>{h}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="roomNumber">Room Number *</label>
+              <input type="text" id="roomNumber" name="roomNumber" value={formData.roomNumber} onChange={handleChange} required placeholder="e.g., 101" />
             </div>
           </div>
-        )}
-        
-        <div className="signature-section">
-          <div className="signature-box">
-            <label htmlFor="studentSignature">Student Signature: *</label>
-            <input
-              type="file"
-              id="studentSignature"
-              name="studentSignature"
-              onChange={handleChange}
-              accept="image/*"
-              required
-              ref={studentSignatureRef}
-            />
-            {formData.studentSignature && (
-              <div className="signature-preview">
-                <p>Selected file: {formData.studentSignature.name}</p>
+
+          {/* Section 2: Leave Information */}
+          <div className="form-divider"></div>
+          <div className="form-section-title">
+            <Icon path={ICONS.calendar} className="section-icon" />
+            Leave Information
+          </div>
+          
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="date">Date of Stay *</label>
+              <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="time">Time *</label>
+              <input type="time" id="time" name="time" value={formData.time} onChange={handleChange} required />
+            </div>
+          </div>
+          
+          <div className="form-group full-width">
+            <label htmlFor="reason">Reason for Staying *</label>
+            <textarea id="reason" name="reason" value={formData.reason} onChange={handleChange} rows="3" placeholder="Provide a valid reason..." required></textarea>
+          </div>
+
+          {/* Section 3: Contact Info */}
+          <div className="form-divider"></div>
+          <div className="form-section-title">
+            <Icon path={ICONS.phone} className="section-icon" />
+            Contact Information
+          </div>
+
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="studentMobile">Student Mobile *</label>
+              <input type="tel" id="studentMobile" name="studentMobile" value={formData.studentMobile} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="parentMobile">Parent Mobile *</label>
+              <input type="tel" id="parentMobile" name="parentMobile" value={formData.parentMobile} onChange={handleChange} required />
+            </div>
+          </div>
+
+          <div className="form-group full-width">
+            <label className="checkbox-label">Informed to Class Advisor?</label>
+            <div className="radio-group">
+              <label className={`radio-option ${formData.informedAdvisor === 'yes' ? 'selected' : ''}`}>
+                <input type="radio" name="informedAdvisor" value="yes" checked={formData.informedAdvisor === "yes"} onChange={handleChange} required />
+                Yes
+              </label>
+              <label className={`radio-option ${formData.informedAdvisor === 'no' ? 'selected' : ''}`}>
+                <input type="radio" name="informedAdvisor" value="no" checked={formData.informedAdvisor === "no"} onChange={handleChange} />
+                No
+              </label>
+            </div>
+          </div>
+
+          {formData.informedAdvisor === "yes" && (
+            <div className="form-grid transition-fade">
+              <div className="form-group">
+                <label htmlFor="advisorName">Class Advisor Name</label>
+                <input type="text" id="advisorName" name="advisorName" value={formData.advisorName} onChange={handleChange} />
               </div>
-            )}
-            <p className="signature-note">Upload a clear image of your signature</p>
+              <div className="form-group">
+                <label htmlFor="advisorMobile">Advisor Mobile</label>
+                <input type="tel" id="advisorMobile" name="advisorMobile" value={formData.advisorMobile} onChange={handleChange} />
+              </div>
+            </div>
+          )}
+
+          {/* Section 4: Signature */}
+          <div className="form-divider"></div>
+          <div className="form-group full-width">
+            <label htmlFor="studentSignature">Student Signature *</label>
+            <label htmlFor="studentSignature" className="file-upload-label">
+              <input type="file" id="studentSignature" name="studentSignature" onChange={handleChange} accept="image/*" required ref={studentSignatureRef} className="hidden-file-input" />
+              <span className="file-upload-button">
+                <Icon path={ICONS.upload} />
+                Upload Signature Image
+              </span>
+              <span className="file-name-display">{formData.studentSignature ? formData.studentSignature.name : "No file chosen"}</span>
+            </label>
           </div>
-        </div>
-        
-        <div className="form-note">
-          <p><strong>Note:</strong> This application will be forwarded to your class advisor and hostel warden for approval.</p>
-        </div>
-        
-        <button type="submit" className="submit-btn">
-          Submit Application
-        </button>
-      </form>
-      
-      <style jsx>{`
-        .leave-container {
-          max-width: 900px;
-          margin: 0 auto;
-          padding: 2rem;
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          color: #333;
-          background-color: #f8f9fa;
-        }
-        
-        .header-section {
-          text-align: center;
-          margin-bottom: 2rem;
-          padding: 1.5rem;
-          background: white;
-          border-radius: 8px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        h2 {
-          color: #2c3e50;
-          margin-bottom: 1rem;
-          font-size: 1.8rem;
-          font-weight: 700;
-        }
-        
-        .note {
-          color: #e74c3c;
-          font-weight: 500;
-          margin-bottom: 0;
-          font-size: 0.9rem;
-        }
-        
-        .leave-form {
-          background-color: white;
-          padding: 2rem;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .form-row {
-          display: flex;
-          gap: 1rem;
-          margin-bottom: 1.5rem;
-        }
-        
-        .form-group {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-        }
-        
-        .full-width {
-          width: 100%;
-        }
-        
-        label {
-          font-weight: 600;
-          margin-bottom: 0.5rem;
-          color: #2c3e50;
-        }
-        
-        input, select, textarea {
-          padding: 0.75rem;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          font-size: 1rem;
-          transition: border-color 0.3s;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-          outline: none;
-          border-color: #3498db;
-          box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-        }
-        
-        textarea {
-          resize: vertical;
-          min-height: 100px;
-        }
-        
-        .radio-group {
-          display: flex;
-          gap: 1rem;
-          margin-top: 0.5rem;
-        }
-        
-        .radio-group label {
-          display: flex;
-          align-items: center;
-          font-weight: normal;
-          cursor: pointer;
-        }
-        
-        .radio-group input[type="radio"] {
-          margin-right: 0.5rem;
-        }
-        
-        .signature-section {
-          display: flex;
-          justify-content: center;
-          margin: 2rem 0;
-        }
-        
-        .signature-box {
-          width: 100%;
-          max-width: 500px;
-          padding: 1rem;
-          border: 2px dashed #ccc;
-          border-radius: 8px;
-          display: flex;
-          flex-direction: column;
-        }
-        
-        .signature-box label {
-          margin-bottom: 1rem;
-        }
-        
-        .signature-preview {
-          margin-top: 1rem;
-          padding: 0.5rem;
-          background-color: #f1f8ff;
-          border-radius: 4px;
-          border-left: 4px solid #3498db;
-        }
-        
-        .signature-preview p {
-          margin: 0;
-          font-size: 0.9rem;
-          color: #2c3e50;
-        }
-        
-        .signature-note {
-          margin-top: 0.5rem;
-          font-size: 0.8rem;
-          color: #7f8c8d;
-          font-style: italic;
-        }
-        
-        .form-note {
-          margin: 1.5rem 0;
-          padding: 1rem;
-          background-color: #fff3cd;
-          border-left: 4px solid #ffc107;
-          border-radius: 4px;
-        }
-        
-        .form-note p {
-          margin: 0;
-          color: #856404;
-        }
-        
-        .submit-btn {
-          background-color: #3498db;
-          color: white;
-          border: none;
-          padding: 0.75rem 1.5rem;
-          font-size: 1rem;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-          margin-top: 1rem;
-          font-weight: 600;
-          width: 100%;
-        }
-        
-        .submit-btn:hover {
-          background-color: #2980b9;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .success-message {
-          text-align: center;
-          background-color: white;
-          padding: 3rem;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .success-message h2 {
-          color: #27ae60;
-          margin-bottom: 1rem;
-        }
-        
-        @media (max-width: 768px) {
-          .form-row {
-            flex-direction: column;
-            gap: 1rem;
-          }
-          
-          .leave-container {
-            padding: 1rem;
-          }
-          
-          .leave-form {
-            padding: 1.5rem;
-          }
-          
-          h2 {
-            font-size: 1.5rem;
-          }
-          
-          .signature-section {
-            flex-direction: column;
-            gap: 1rem;
-          }
-        }
-      `}</style>
+
+          <div className="form-note">
+            <p><strong>Note:</strong> Ensure this form is submitted at least 2 hours before class starts.</p>
+          </div>
+
+          <button type="submit" className="submit-btn" disabled={loading}>
+            {loading ? (
+              <>
+                <span className="spinner"></span> Submitting...
+              </>
+            ) : (
+              <>
+                Submit Application
+                <Icon path={ICONS.send} />
+              </>
+            )}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

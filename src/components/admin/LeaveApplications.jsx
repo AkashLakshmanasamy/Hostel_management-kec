@@ -1,6 +1,30 @@
+// src/components/admin/LeaveManagement.jsx
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
-import "../../styles/LeaveManagement.css";
+// Import our new, component-specific CSS file
+import "../../styles/LeaveManagement-new.css";
+
+// --- New Icon SVGs ---
+const Icon = ({ path, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    className={`icon ${className}`}
+  >
+    <path fillRule="evenodd" d={path} clipRule="evenodd" />
+  </svg>
+);
+
+const ICONS = {
+  approve: "M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.052-.143z",
+  reject: "M10 18a8 8 0 100-16 8 8 0 000 16zM6.5 9.25a.75.75 0 000 1.5h7a.75.75 0 000-1.5h-7z",
+  refresh: "M.75 4.75a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5H1.5a.75.75 0 01-.75-.75zM1.5 6.75a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5H1.5zM19.25 15.25a.75.75 0 01-.75.75h-7.5a.75.75 0 010-1.5h7.5a.75.75 0 01.75.75zM18.5 13.25a.75.75 0 000-1.5h-4.5a.75.75 0 000 1.5h4.5zM6.252 8.618A.75.75 0 017.31 9.77l-4.5 4.5a.75.75 0 01-1.06 0l-1.5-1.5a.75.75 0 111.06-1.06l.97.97L5.84 8.68a.75.75 0 01.412-.062zM13.748 11.382a.75.75 0 01-.412.062L11.77 12.82l-1.03-1.03a.75.75 0 011.06-1.06l1.5 1.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-.97-.97a.75.75 0 111.06-1.06l3.47 3.47 3.44-4.4a.75.75 0 01.412-.062z",
+  upload: "M9.97 4.97a.75.75 0 011.06 0l3 3a.75.75 0 01-1.06 1.06l-1.72-1.72v7.94a.75.75 0 01-1.5 0v-7.94L8.97 9.03a.75.75 0 01-1.06-1.06l3-3zM3.75 12.75A.75.75 0 013 12V8.75a.75.75 0 011.5 0V12a.75.75 0 01-.75.75zM12 12.75a.75.75 0 01-.75-.75V8.75a.75.75 0 011.5 0V12a.75.75 0 01-.75.75zM16.25 12.75a.75.75 0 01-.75-.75V8.75a.75.75 0 011.5 0V12a.75.75 0 01-.75.75zM4 17a1 1 0 01-1-1v-2.25a.75.75 0 011.5 0v2.25a.25.25 0 00.25.25h10.5a.25.25 0 00.25-.25v-2.25a.75.75 0 011.5 0V16a1 1 0 01-1 1H4z",
+  close: "M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z",
+  link: "M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.5 1.5a2.5 2.5 0 01-3.536-3.536l1.5-1.5zM11.5 8a.5.5 0 00-.5.5v.5a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5v-.5a.5.5 0 00-.5-.5h-.5zM8 11.5a.5.5 0 00-.5.5v.5a.5.5 0 00.5.5h.5a.5.5 0 00.5-.5v-.5a.5.5 0 00-.5-.5h-.5zM7.768 15.768a2.5 2.5 0 01-3.536-3.536l1.5-1.5a2.5 2.5 0 013.536 3.536l-1.5 1.5z",
+};
+// --- End Icons ---
 
 export default function LeaveManagement() {
   const [leaves, setLeaves] = useState([]);
@@ -8,17 +32,17 @@ export default function LeaveManagement() {
   const [adminSignature, setAdminSignature] = useState(null);
   const [signatureUploading, setSignatureUploading] = useState(false);
   const [message, setMessage] = useState("");
-  const [filter, setFilter] = useState("all"); // "all", "pending", "approved", "rejected"
+  const [filter, setFilter] = useState("all");
   const [selectedLeave, setSelectedLeave] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  // --- All functionality below is 100% UNCHANGED ---
   useEffect(() => {
     const saved = localStorage.getItem("adminSignatureUrl");
     if (saved) setAdminSignature(saved);
     fetchLeaves();
   }, []);
 
-  // ✅ Fetch all leave applications
   const fetchLeaves = async () => {
     setLoading(true);
     try {
@@ -39,7 +63,6 @@ export default function LeaveManagement() {
     }
   };
 
-  // ✅ Signature upload handler
   const handleSignatureUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -79,7 +102,6 @@ export default function LeaveManagement() {
     }
   };
 
-  // ✅ Update leave status (approve/reject)
   const updateLeave = async (id, status) => {
     if (status === "approved") {
       if (signatureUploading) {
@@ -116,7 +138,6 @@ export default function LeaveManagement() {
     }
   };
 
-  // ✅ Generate verified form
   const generateVerifiedForm = async (leaveId, signatureUrl) => {
     const leave = leaves.find((l) => l.id === leaveId);
     if (!leave) {
@@ -126,7 +147,6 @@ export default function LeaveManagement() {
 
     const formContent = `
       Leave Application Verified Form
-
       Name: ${leave.name}
       Roll No: ${leave.roll_number}
       Branch: ${leave.branch}
@@ -135,7 +155,6 @@ export default function LeaveManagement() {
       Hostel: ${leave.hostel_name}, Room: ${leave.room_number}
       Date of Stay: ${leave.date_of_stay} at ${leave.time}
       Reason: ${leave.reason}
-
       Approved & Signed by Admin ✅
     `;
 
@@ -159,136 +178,123 @@ export default function LeaveManagement() {
     }
   };
 
-  // View leave details
   const viewLeaveDetails = (leave) => {
     setSelectedLeave(leave);
     setShowModal(true);
   };
-
-  // Filter leaves based on status
+  
   const filteredLeaves = filter === "all" 
     ? leaves 
     : leaves.filter(leave => leave.status === filter);
 
-  // Get stats for dashboard
   const stats = {
     total: leaves.length,
     pending: leaves.filter(l => l.status === "pending").length,
     approved: leaves.filter(l => l.status === "approved").length,
     rejected: leaves.filter(l => l.status === "rejected").length
   };
+  // --- End of unchanged functionality ---
+  
 
   if (loading) {
     return (
-      <div className="leave-management-container">
-        <div className="loading-state">
-          <div className="loading-spinner"></div>
-          <p>Loading leave applications...</p>
-        </div>
+      <div className="component-loading">
+        <div className="loading-spinner"></div>
+        <p>Loading leave applications...</p>
       </div>
     );
   }
 
   return (
-    <div className="leave-management-container">
-      <div className="leave-management-header">
-        <h2>Leave Applications Management</h2>
-        <p>Review and manage student leave applications</p>
+    <div className="leave-layout">
+      {/* Use standard component header */}
+      <div className="component-header">
+        <div className="component-header-left">
+          <h2 className="component-header-title">Leave Applications</h2>
+          <div className="filter-controls">
+            <div className="filter-group">
+              <label htmlFor="status-filter">Status:</label>
+              <select id="status-filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
+                <option value="all">All Applications</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <button onClick={fetchLeaves} className="button-secondary">
+          <Icon path={ICONS.refresh} />
+          <span>Refresh</span>
+        </button>
       </div>
 
       {message && (
-        <div className={`message-alert ${message.includes("✅") ? "success" : "error"}`}>
+        <div className={`component-message ${message.includes("✅") || message.includes("success") ? "success" : "error"}`}>
           {message}
         </div>
       )}
 
-      {/* Stats Overview */}
-      <div className="stats-section">
+      {/* Stats Grid (reusing styles from Feedback) */}
+      <div className="stats-grid">
         <div className="stat-card">
-          <div className="stat-icon total">📋</div>
-          <div className="stat-content">
-            <span className="stat-number">{stats.total}</span>
-            <span className="stat-label">Total Leaves</span>
-          </div>
+          <span className="stat-label">Total Leaves</span>
+          <span className="stat-number">{stats.total}</span>
         </div>
         <div className="stat-card">
-          <div className="stat-icon pending">⏳</div>
-          <div className="stat-content">
-            <span className="stat-number">{stats.pending}</span>
-            <span className="stat-label">Pending</span>
-          </div>
+          <span className="stat-label">Pending</span>
+          <span className="stat-number">{stats.pending}</span>
         </div>
         <div className="stat-card">
-          <div className="stat-icon approved">✅</div>
-          <div className="stat-content">
-            <span className="stat-number">{stats.approved}</span>
-            <span className="stat-label">Approved</span>
-          </div>
+          <span className="stat-label">Approved</span>
+          <span className="stat-number">{stats.approved}</span>
         </div>
         <div className="stat-card">
-          <div className="stat-icon rejected">❌</div>
-          <div className="stat-content">
-            <span className="stat-number">{stats.rejected}</span>
-            <span className="stat-label">Rejected</span>
-          </div>
+          <span className="stat-label">Rejected</span>
+          <span className="stat-number">{stats.rejected}</span>
         </div>
       </div>
 
-      {/* Signature upload section */}
-      <div className="signature-section">
-        <div className="section-header">
+      {/* Signature upload section (new styled card) */}
+      <div className="card-section">
+        <div className="card-section-header">
           <h3>Admin Signature</h3>
-          <p>Upload your signature to approve leave applications</p>
+          <p>Upload your signature file to approve leave applications.</p>
         </div>
-        <div className="signature-upload">
-          <label className="file-upload-label">
+        <div className="signature-upload-content">
+          <label className="button-primary">
             <input
               type="file"
               accept="image/*"
               onChange={handleSignatureUpload}
               disabled={signatureUploading}
+              className="hidden-file-input"
             />
-            <span className="file-upload-button">
-              {signatureUploading ? "Uploading..." : "Choose Signature File"}
-            </span>
+            <Icon path={ICONS.upload} />
+            <span>{signatureUploading ? "Uploading..." : "Choose Signature"}</span>
           </label>
           {adminSignature && (
             <div className="signature-preview">
-              <span>Uploaded Signature:</span>
-              <a href={adminSignature} target="_blank" rel="noreferrer" className="signature-link">
-                View Signature
+              <Icon path={ICONS.link} />
+              <span>Current Signature:</span>
+              <a href={adminSignature} target="_blank" rel="noreferrer" className="link-document">
+                View Uploaded File
               </a>
             </div>
           )}
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="filters-section">
-        <div className="filter-group">
-          <label>Filter by status:</label>
-          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">All Applications</option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-          </select>
-        </div>
-        <button onClick={fetchLeaves} className="refresh-button">
-          ↻ Refresh
-        </button>
-      </div>
-
       {/* Leaves table */}
       {filteredLeaves.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">📝</div>
+          <div className="empty-state-icon">📝</div>
           <h3>No leave applications found</h3>
           <p>{filter !== "all" ? `No ${filter} applications` : "No leave applications submitted yet"}</p>
         </div>
       ) : (
-        <div className="leaves-table-container">
-          <table className="leaves-table">
+        <div className="table-wrapper">
+          <table>
             <thead>
               <tr>
                 <th>Student Details</th>
@@ -300,57 +306,64 @@ export default function LeaveManagement() {
             </thead>
             <tbody>
               {filteredLeaves.map((leave) => (
-                <tr key={leave.id} className={`status-${leave.status}`}>
-                  <td>
+                <tr key={leave.id} className={
+                  leave.status === 'approved' ? 'row-approved' : 
+                  leave.status === 'rejected' ? 'row-rejected' : ''
+                }>
+                  <td data-label="Student Details">
                     <div className="student-info">
-                      <div className="student-name">{leave.name}</div>
-                      <div className="student-roll">{leave.roll_number}</div>
+                      <span className="student-name">{leave.name}</span>
+                      <span className="student-roll">{leave.roll_number}</span>
                     </div>
                   </td>
-                  <td>
+                  <td data-label="Academic Info">
                     <div className="academic-info">
-                      <div>{leave.branch}</div>
-                      <div>Year {leave.year}, Sem {leave.semester}</div>
+                      <span>{leave.branch}</span>
+                      <span>Year {leave.year}, Sem {leave.semester}</span>
                     </div>
                   </td>
-                  <td>
-                    <div className="leave-details">
-                      <div className="leave-date">{leave.date_of_stay}</div>
-                      <div className="leave-time">{leave.time}</div>
+                  <td data-label="Leave Details">
+                    <div className="leave-details-cell">
+                      <span className="leave-date">{leave.date_of_stay}</span>
+                      <span className="leave-time">{leave.time}</span>
                       <button 
                         onClick={() => viewLeaveDetails(leave)}
-                        className="view-reason-btn"
+                        className="button-text-link"
                       >
                         View Reason
                       </button>
                     </div>
                   </td>
-                  <td>
-                    <span className={`status-badge ${leave.status}`}>
+                  <td data-label="Status">
+                    <span className={`status-badge ${
+                      leave.status === 'pending' ? 'status-pending' :
+                      leave.status === 'approved' ? 'status-confirmed' : // Standardize to "confirmed"
+                      'status-rejected'
+                    }`}>
                       {leave.status}
                     </span>
                   </td>
-                  <td>
+                  <td data-label="Actions">
                     <div className="action-buttons">
-                      {leave.status === "pending" && (
+                      {leave.status === "pending" ? (
                         <>
                           <button
                             onClick={() => updateLeave(leave.id, "approved")}
-                            className="action-btn approve-btn"
+                            className="button-icon confirmed"
                             disabled={signatureUploading || !adminSignature}
                             title={!adminSignature ? "Upload signature first" : "Approve leave"}
                           >
-                            Approve
+                            <Icon path={ICONS.approve} />
                           </button>
                           <button
                             onClick={() => updateLeave(leave.id, "rejected")}
-                            className="action-btn reject-btn"
+                            className="button-icon rejected"
+                            title="Reject leave"
                           >
-                            Reject
+                            <Icon path={ICONS.reject} />
                           </button>
                         </>
-                      )}
-                      {leave.status !== "pending" && (
+                      ) : (
                         <span className="action-completed">
                           Processed
                         </span>
@@ -364,47 +377,45 @@ export default function LeaveManagement() {
         </div>
       )}
 
-      {/* Modal for leave details */}
+      {/* Modal for leave details (new styles) */}
       {showModal && selectedLeave && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3>Leave Application Details</h3>
-              <button className="modal-close" onClick={() => setShowModal(false)}>×</button>
+              <button className="modal-close" onClick={() => setShowModal(false)}>
+                <Icon path={ICONS.close} />
+              </button>
             </div>
             <div className="modal-body">
               <div className="detail-grid">
                 <div className="detail-item">
-                  <label>Student Name:</label>
+                  <label>Student Name</label>
                   <span>{selectedLeave.name}</span>
                 </div>
                 <div className="detail-item">
-                  <label>Roll Number:</label>
+                  <label>Roll Number</label>
                   <span>{selectedLeave.roll_number}</span>
                 </div>
                 <div className="detail-item">
-                  <label>Branch:</label>
+                  <label>Branch</label>
                   <span>{selectedLeave.branch}</span>
                 </div>
                 <div className="detail-item">
-                  <label>Year/Semester:</label>
+                  <label>Year/Semester</label>
                   <span>Year {selectedLeave.year}, Sem {selectedLeave.semester}</span>
                 </div>
                 <div className="detail-item">
-                  <label>Hostel & Room:</label>
+                  <label>Hostel & Room</label>
                   <span>{selectedLeave.hostel_name}, Room {selectedLeave.room_number}</span>
                 </div>
                 <div className="detail-item">
-                  <label>Date of Stay:</label>
+                  <label>Date of Stay</label>
                   <span>{selectedLeave.date_of_stay}</span>
                 </div>
-                <div className="detail-item">
-                  <label>Time:</label>
-                  <span>{selectedLeave.time}</span>
-                </div>
                 <div className="detail-item full-width">
-                  <label>Reason:</label>
-                  <p className="leave-reason">{selectedLeave.reason}</p>
+                  <label>Reason for Leave</label>
+                  <p className="leave-reason-text">{selectedLeave.reason}</p>
                 </div>
               </div>
             </div>

@@ -1,5 +1,38 @@
 // src/pages/Schedule.jsx
 import React, { useState } from "react";
+// Import the new professional CSS
+import "../styles/Schedule-new.css";
+
+// --- Icons ---
+const Icon = ({ path, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    className={`icon ${className}`}
+  >
+    <path fillRule="evenodd" d={path} clipRule="evenodd" />
+  </svg>
+);
+
+const ICONS = {
+  coffee: "M2 8a6 6 0 016-6v1.5A4.5 4.5 0 003.5 8H2zm10.5-6V.5a7.5 7.5 0 00-7.5 7.5H6.5A6 6 0 0112.5 2zM14 7.5A2.5 2.5 0 0111.5 10V5a2.5 2.5 0 012.5 2.5z", // Custom SVG paths might need tweaking or use simple shapes
+  sun: "M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h1a1 1 0 100 2h-1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z",
+  moon: "M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z",
+  clock: "M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+};
+
+// Use simple unicode chars for food icons to keep code clean, or SVGs if preferred
+const MealIcon = ({ type }) => {
+  switch(type) {
+    case 'Morning': return <span className="meal-icon">☕</span>;
+    case 'Breakfast': return <span className="meal-icon">🍳</span>;
+    case 'Lunch': return <span className="meal-icon">🍱</span>;
+    case 'Evening': return <span className="meal-icon">🍵</span>;
+    case 'Dinner': return <span className="meal-icon">🍽️</span>;
+    default: return null;
+  }
+};
 
 export default function Schedule() {
   const [selectedDay, setSelectedDay] = useState("Monday");
@@ -59,288 +92,121 @@ export default function Schedule() {
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   return (
-    <div className="schedule-container">
-      <div className="header-section">
-        <h1>Weekly Food Menu </h1>
-        <p className="intro">Delicious Tamil Nadu vegetarian meals prepared daily with authentic flavors</p>
-      </div>
-
-      <div className="days-selector">
-        {daysOfWeek.map(day => (
-          <button
-            key={day}
-            className={`day-btn ${selectedDay === day ? 'active' : ''}`}
-            onClick={() => setSelectedDay(day)}
-          >
-            {day}
-          </button>
-        ))}
-      </div>
-
-      <div className="menu-card">
-        <h2 className="day-heading">{selectedDay} Menu</h2>
-        
-        <div className="meal-section">
-          <h3>Morning Beverages (6:30 AM - 7:30 AM)</h3>
-          <div className="beverage-list">
-            {weeklyMenu[selectedDay].morning.map((item, index) => (
-              <div key={index} className="beverage-item">
-                <span className="beverage-icon">☕</span>
-                {item}
-              </div>
-            ))}
-          </div>
+    <div className="schedule-page">
+      <div className="schedule-card">
+        <div className="schedule-header">
+          <h2>Weekly Food Menu</h2>
+          <p>Delicious Tamil Nadu vegetarian meals prepared daily with authentic flavors.</p>
         </div>
 
-        <div className="meal-section">
-          <h3>Breakfast (8:00 AM - 9:30 AM)</h3>
-          <p>{weeklyMenu[selectedDay].breakfast}</p>
-        </div>
-
-        <div className="meal-section">
-          <h3>Lunch (12:30 PM - 2:00 PM)</h3>
-          <p>{weeklyMenu[selectedDay].lunch}</p>
-        </div>
-
-        <div className="meal-section">
-          <h3>Evening Beverages (4:30 PM - 5:30 PM)</h3>
-          <div className="beverage-list">
-            {weeklyMenu[selectedDay].evening.map((item, index) => (
-              <div key={index} className="beverage-item">
-                <span className="beverage-icon">🫖</span>
-                {item}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="meal-section">
-          <h3>Dinner (7:30 PM - 9:00 PM)</h3>
-          <p>{weeklyMenu[selectedDay].dinner}</p>
-        </div>
-      </div>
-
-      <div className="weekly-overview">
-        <h2>Weekly Menu Overview</h2>
-        <div className="week-grid">
+        <div className="days-selector">
           {daysOfWeek.map(day => (
-            <div key={day} className="day-card" onClick={() => setSelectedDay(day)}>
-              <h3>{day}</h3>
-              <div className="day-menu-preview">
-                <p><strong>Breakfast:</strong> {weeklyMenu[day].breakfast.split(',')[0]}</p>
-                <p><strong>Lunch:</strong> {weeklyMenu[day].lunch.split(',')[0]}</p>
-                <p><strong>Dinner:</strong> {weeklyMenu[day].dinner.split(',')[0]}</p>
-              </div>
-            </div>
+            <button
+              key={day}
+              className={`day-btn ${selectedDay === day ? 'active' : ''}`}
+              onClick={() => setSelectedDay(day)}
+            >
+              {day.substring(0, 3)} {/* Show Mon, Tue etc on mobile */}
+              <span className="full-day-name">{day.substring(3)}</span>
+            </button>
           ))}
         </div>
-      </div>
 
-      <style jsx>{`
-        .schedule-container {
-          max-width: 1000px;
-          margin: 0 auto;
-          padding: 2rem;
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          color: #333;
-          background-color: #f8f9fa;
-        }
-        
-        .header-section {
-          text-align: center;
-          margin-bottom: 2rem;
-          padding: 2rem;
-          background: white;
-          border-radius: 8px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-          border-left: 4px solid #e74c3c;
-        }
-        
-        h1 {
-          color: #2c3e50;
-          margin-bottom: 1rem;
-          font-size: 2.2rem;
-        }
-        
-        .intro {
-          color: #7f8c8d;
-          font-size: 1.1rem;
-        }
-        
-        .days-selector {
-          display: flex;
-          justify-content: center;
-          margin-bottom: 2rem;
-          gap: 0.5rem;
-          flex-wrap: wrap;
-        }
-        
-        .day-btn {
-          padding: 0.75rem 1rem;
-          border: none;
-          background: white;
-          border-radius: 6px;
-          cursor: pointer;
-          font-weight: 600;
-          transition: all 0.3s;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          min-width: 100px;
-        }
-        
-        .day-btn.active {
-          background: #e74c3c;
-          color: white;
-        }
-        
-        .day-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        
-        .menu-card {
-          background: white;
-          padding: 2rem;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          margin-bottom: 2rem;
-          border-left: 4px solid #3498db;
-        }
-        
-        .day-heading {
-          color: #2c3e50;
-          text-align: center;
-          margin-bottom: 2rem;
-          padding-bottom: 0.5rem;
-          border-bottom: 2px solid #e74c3c;
-        }
-        
-        .meal-section {
-          margin-bottom: 2rem;
-          padding: 1.5rem;
-          background: #f8f9fa;
-          border-radius: 8px;
-          border-left: 3px solid #27ae60;
-        }
-        
-        .meal-section h3 {
-          color: #e74c3c;
-          margin-bottom: 1rem;
-        }
-        
-        .meal-section p {
-          line-height: 1.6;
-          margin: 0;
-          font-size: 1.1rem;
-        }
-        
-        .beverage-list {
-          display: flex;
-          gap: 1.5rem;
-        }
-        
-        .beverage-item {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          background: white;
-          padding: 0.75rem 1rem;
-          border-radius: 6px;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          font-size: 1.1rem;
-        }
-        
-        .beverage-icon {
-          font-size: 1.2rem;
-        }
-        
-        .weekly-overview {
-          background: white;
-          padding: 2rem;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          border-left: 4px solid #f39c12;
-        }
-        
-        .weekly-overview h2 {
-          color: #2c3e50;
-          text-align: center;
-          margin-bottom: 1.5rem;
-        }
-        
-        .week-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 1rem;
-        }
-        
-        .day-card {
-          background: #f8f9fa;
-          padding: 1rem;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: all 0.3s;
-          text-align: center;
-          border: 1px solid #ddd;
-        }
-        
-        .day-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-          border-color: #e74c3c;
-        }
-        
-        .day-card h3 {
-          color: #2c3e50;
-          margin-bottom: 1rem;
-          padding-bottom: 0.5rem;
-          border-bottom: 1px solid #ddd;
-        }
-        
-        .day-menu-preview p {
-          margin: 0.5rem 0;
-          font-size: 0.9rem;
-          line-height: 1.4;
-          text-align: left;
-        }
-        
-        @media (max-width: 768px) {
-          .schedule-container {
-            padding: 1rem;
-          }
+        <div className="menu-content">
+          <h3 className="day-heading">{selectedDay}'s Menu</h3>
           
-          .header-section {
-            padding: 1.5rem;
-          }
-          
-          h1 {
-            font-size: 1.8rem;
-          }
-          
-          .days-selector {
-            flex-wrap: wrap;
-          }
-          
-          .day-btn {
-            min-width: 80px;
-            padding: 0.5rem;
-            font-size: 0.9rem;
-          }
-          
-          .beverage-list {
-            flex-direction: column;
-            gap: 0.5rem;
-          }
-          
-          .week-grid {
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-          }
-          
-          .meal-section p {
-            font-size: 1rem;
-          }
-        }
-      `}</style>
+          <div className="timeline-container">
+            {/* Morning */}
+            <div className="meal-card">
+              <div className="meal-header">
+                <div className="meal-title">
+                  <MealIcon type="Morning" />
+                  <span>Morning Beverages</span>
+                </div>
+                <span className="meal-time">6:30 AM - 7:30 AM</span>
+              </div>
+              <div className="meal-items-tags">
+                {weeklyMenu[selectedDay].morning.map((item, i) => (
+                  <span key={i} className="food-tag">{item}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Breakfast */}
+            <div className="meal-card">
+              <div className="meal-header">
+                <div className="meal-title">
+                  <MealIcon type="Breakfast" />
+                  <span>Breakfast</span>
+                </div>
+                <span className="meal-time">8:00 AM - 9:30 AM</span>
+              </div>
+              <p className="meal-description">{weeklyMenu[selectedDay].breakfast}</p>
+            </div>
+
+            {/* Lunch */}
+            <div className="meal-card">
+              <div className="meal-header">
+                <div className="meal-title">
+                  <MealIcon type="Lunch" />
+                  <span>Lunch</span>
+                </div>
+                <span className="meal-time">12:30 PM - 2:00 PM</span>
+              </div>
+              <p className="meal-description">{weeklyMenu[selectedDay].lunch}</p>
+            </div>
+
+            {/* Evening */}
+            <div className="meal-card">
+              <div className="meal-header">
+                <div className="meal-title">
+                  <MealIcon type="Evening" />
+                  <span>Evening Beverages</span>
+                </div>
+                <span className="meal-time">4:30 PM - 5:30 PM</span>
+              </div>
+              <div className="meal-items-tags">
+                {weeklyMenu[selectedDay].evening.map((item, i) => (
+                  <span key={i} className="food-tag">{item}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Dinner */}
+            <div className="meal-card">
+              <div className="meal-header">
+                <div className="meal-title">
+                  <MealIcon type="Dinner" />
+                  <span>Dinner</span>
+                </div>
+                <span className="meal-time">7:30 PM - 9:00 PM</span>
+              </div>
+              <p className="meal-description">{weeklyMenu[selectedDay].dinner}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="weekly-overview">
+          <h3 className="overview-title">Quick Weekly Overview</h3>
+          <div className="week-grid">
+            {daysOfWeek.map(day => (
+              <div 
+                key={day} 
+                className={`day-card-mini ${selectedDay === day ? 'highlight' : ''}`}
+                onClick={() => setSelectedDay(day)}
+              >
+                <h4>{day}</h4>
+                <div className="mini-menu-item">
+                  <span>🍳</span> {weeklyMenu[day].breakfast.split(',')[0]}...
+                </div>
+                <div className="mini-menu-item">
+                  <span>🍱</span> {weeklyMenu[day].lunch.split(',')[0]}...
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

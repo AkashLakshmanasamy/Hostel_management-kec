@@ -1,0 +1,189 @@
+/* src/styles/FeedbackManagement-new.css */
+/* This file RELIES on AdminDashboard.css */
+
+/* ---------- 1. COMPONENT-SPECIFIC LAYOUT ---------- */
+
+/* This overrides the default .component-header for this specific component */
+.component-header {
+  flex-wrap: wrap; /* Allow stacking */
+}
+.component-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.filter-group label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+/* Secondary button style (for Refresh) */
+.button-secondary {
+  /* Inherits base button styles */
+  background-color: var(--content-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--content-border);
+  box-shadow: var(--shadow-sm);
+  gap: 0.5rem;
+  align-self: flex-start; /* Align with filters */
+}
+.button-secondary:hover {
+  background-color: var(--content-border);
+}
+.button-secondary .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ---------- 2. STATS GRID ---------- */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: var(--content-card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--content-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-light);
+  margin-bottom: 0.25rem;
+}
+
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ---------- 3. TABLE-SPECIFIC STYLES ---------- */
+
+.student-info {
+  display: flex;
+  flex-direction: column;
+}
+.student-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.student-email {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  margin-top: 0.25rem;
+}
+
+.feedback-message {
+  max-width: 350px;
+  line-height: 1.5;
+  white-space: pre-wrap; /* Respects newlines in feedback */
+}
+
+.feedback-date {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  white-space: nowrap;
+}
+
+/* New Urgency Badges (reusing status-badge padding) */
+.urgency-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px; /* Pill shape */
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid transparent;
+}
+
+.urgency-badge.urgency-high {
+  background-color: #FEF2F2; /* Red 50 */
+  color: #B91C1C; /* Red 700 */
+  border-color: #FECACA; /* Red 200 */
+}
+
+.urgency-badge.urgency-medium {
+  background-color: #FFFBEB; /* Amber 50 */
+  color: #B45309; /* Amber 700 */
+  border-color: #FDE68A; /* Amber 200 */
+}
+
+.urgency-badge.urgency-low {
+  background-color: #EFF6FF; /* Blue 50 */
+  color: #1E40AF; /* Blue 800 */
+  border-color: #DBEAFE; /* Blue 200 */
+}
+
+/* Faded style for resolved rows */
+tbody tr.row-resolved {
+  background-color: #F8FAFC; /* Gray 50 */
+  opacity: 0.8;
+}
+
+tbody tr.row-resolved:hover {
+  background-color: #F1F5F9; /* Gray 100 */
+  opacity: 1;
+}
+
+/* Icon-only buttons */
+.button-icon {
+  /* Inherits base button styles */
+  width: 36px;
+  height: 36px;
+  border-radius: 50%; /* Circle */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.button-icon .icon {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* We already have .confirmed and .rejected from global CSS */
+/* We just need to add .warning for the unresolve button */
+.button-icon.warning {
+  background-color: var(--warning-color);
+  color: white;
+}
+.button-icon.warning:hover {
+  background-color: #D97706; /* Darker amber */
+}
+
+/* ---------- 4. RESPONSIVE ---------- */
+
+@media (max-width: 968px) {
+  /* The .component-header already wraps, this is good. */
+  /* Make stats grid stack nicely */
+  .stats-grid {
+    grid-template-columns: 1fr 1fr; /* 2 columns on tablet */
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr; /* 1 column on mobile */
+  }
+}

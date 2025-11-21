@@ -1,14 +1,19 @@
 // src/components/admin/RoomRequests.jsx
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
-import "../../styles/RoomRequests.css";
+// We no longer need a separate CSS import, 
+// it's all handled by AdminDashboard.css
+// import "../../styles/RoomRequests.css"; 
+
+// We'll create a new, minimal CSS file for component-specific styles
+import "../../styles/RoomRequests-new.css"; 
 
 export default function RoomRequests() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all"); // "all", "pending", "confirmed", "rejected"
 
-  // Fetch all room allocation requests
+  // Fetch all room allocation requests (FUNCTIONALITY UNCHANGED)
   const fetchRequests = async () => {
     setLoading(true);
     try {
@@ -37,7 +42,7 @@ export default function RoomRequests() {
     fetchRequests();
   }, [filter]);
 
-  // Update allocation status and student can_apply
+  // Update allocation status and student can_apply (FUNCTIONALITY UNCHANGED)
   const updateStatus = async (uuid, status) => {
     if (!uuid) return alert("Invalid allocation ID");
 
@@ -57,7 +62,6 @@ export default function RoomRequests() {
       const allocation = updatedAllocations[0];
 
       // ✅ Update student's can_apply
-      // Set can_apply to false only if the status is "confirmed"
       const canApplyValue = status === "confirmed" ? false : true;
       const { error: studentError } = await supabase
         .from("student_profiles")
@@ -74,20 +78,11 @@ export default function RoomRequests() {
     }
   };
 
-  const getStatusBadgeClass = (status) => {
-    switch (status) {
-      case "confirmed":
-        return "status-badge status-confirmed";
-      case "rejected":
-        return "status-badge status-rejected";
-      default:
-        return "status-badge status-pending";
-    }
-  };
+  // We removed the getStatusBadgeClass() function
 
   if (loading) {
     return (
-      <div className="room-requests-container">
+      <div className="component-loading">
         <div className="loading-spinner"></div>
         <p>Loading room requests...</p>
       </div>
@@ -95,15 +90,15 @@ export default function RoomRequests() {
   }
 
   return (
-    <div className="room-requests-container">
-      <div className="room-requests-header">
-        <h2>Room Allocation Requests</h2>
+    <div className="room-requests-layout">
+      <div className="component-header">
+        <h2 className="component-header-title">Room Allocation Requests</h2>
         <div className="filter-controls">
-          <span>Filter by status:</span>
+          <label htmlFor="status-filter">Filter by status:</label>
           <select 
+            id="status-filter"
             value={filter} 
             onChange={(e) => setFilter(e.target.value)}
-            className="status-filter"
           >
             <option value="all">All Requests</option>
             <option value="pending">Pending</option>
@@ -117,11 +112,17 @@ export default function RoomRequests() {
         <div className="empty-state">
           <div className="empty-state-icon">📋</div>
           <h3>No room requests found</h3>
-          <p>There are currently no room allocation requests{filter !== "all" ? ` with status "${filter}"` : ""}.</p>
+          <p>
+            There are currently no room allocation requests
+            {filter !== "all" ? ` with status "${filter}"` : ""}.
+          </p>
         </div>
       ) : (
-        <div className="requests-table-container">
-          <table className="room-requests-table">
+        <div className="table-wrapper">
+          {/* No specific table class is needed.
+            The styles from AdminDashboard.css will apply automatically.
+          */}
+          <table>
             <thead>
               <tr>
                 <th>Student</th>
@@ -136,49 +137,48 @@ export default function RoomRequests() {
             </thead>
             <tbody>
               {requests.map((r) => (
-                <tr key={r.id} className="request-row">
-                  <td>
-                    <div className="student-info">
-                      <div className="student-name">{r.name}</div>
-                    </div>
-                  </td>
-                  <td>{r.reg_no}</td>
-                  <td>{r.hostel}</td>
-                  <td>
+                <tr key={r.id}>
+                  <td data-label="Student">{r.name || "N/A"}</td>
+                  <td data-label="Reg. No">{r.reg_no}</td>
+                  <td data-label="Hostel">{r.hostel}</td>
+                  <td data-label="Room">
                     <span className="room-badge">{r.room_number}</span>
                   </td>
-                  <td>
+                  <td data-label="Bed">
                     <span className="bed-badge">{r.bed_number}</span>
                   </td>
-                  <td>
-                    <span className={getStatusBadgeClass(r.status)}>
+                  <td data-label="Status">
+                    {/* Simplified status badge logic */}
+                    <span className={`status-badge status-${r.status}`}>
                       {r.status}
                     </span>
                   </td>
-                  <td>
+                  <td data-label="Document">
                     {r.receipt_url && (
                       <a 
                         href={r.receipt_url} 
                         target="_blank" 
                         rel="noreferrer"
-                        className="document-link"
+                        className="link-document"
                       >
                         View Document
                       </a>
                     )}
                   </td>
-                  <td>
+                  <td data-label="Actions">
                     <div className="action-buttons">
                       <button 
                         onClick={() => updateStatus(r.id, "confirmed")}
-                        className="btn-confirm"
+                        // Use the class from AdminDashboard.css
+                        className="confirmed" 
                         disabled={r.status === "confirmed"}
                       >
                         Confirm
                       </button>
                       <button 
                         onClick={() => updateStatus(r.id, "rejected")}
-                        className="btn-reject"
+                        // Use the class from AdminDashboard.css
+                        className="rejected"
                         disabled={r.status === "rejected"}
                       >
                         Reject

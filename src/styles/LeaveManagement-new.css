@@ -1,0 +1,385 @@
+/* src/styles/LeaveManagement-new.css */
+/* This file RELIES on AdminDashboard.css for base styles */
+
+/* ---------- 1. COMPONENT LAYOUT & HEADER ---------- */
+.leave-layout {
+  width: 100%;
+}
+
+/* This component uses the same header as FeedbackManagement */
+.component-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.filter-group label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+/* Secondary button style (for Refresh) */
+.button-secondary {
+  background-color: var(--content-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--content-border);
+  box-shadow: var(--shadow-sm);
+  gap: 0.5rem;
+  align-self: flex-start; 
+}
+.button-secondary:hover {
+  background-color: var(--content-border);
+}
+.button-secondary .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ---------- 2. MESSAGE ALERT ---------- */
+.component-message {
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-lg);
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+.component-message.success {
+  background-color: #F0FDF4; /* Green 50 */
+  color: #15803D; /* Green 700 */
+  border-color: #A7F3D0; /* Green 200 */
+}
+.component-message.error {
+  background-color: #FEF2F2; /* Red 50 */
+  color: #B91C1C; /* Red 700 */
+  border-color: #FECACA; /* Red 200 */
+}
+
+/* ---------- 3. STATS GRID (Copied from Feedback) ---------- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: var(--content-card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--content-border);
+  box-shadow: var(--shadow-sm);
+}
+.stat-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-light);
+  margin-bottom: 0.25rem;
+}
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ---------- 4. SIGNATURE CARD SECTION ---------- */
+.card-section {
+  background-color: var(--content-card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--content-border);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+.card-section-header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--content-border);
+  margin-bottom: 1rem;
+}
+.card-section-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+}
+.card-section-header p {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin: 0;
+}
+
+.signature-upload-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hidden-file-input {
+  display: none;
+}
+/* The label is styled as a button using global .button-primary class */
+
+.signature-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+.signature-preview .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Use the global link style */
+.link-document {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+.link-document:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 5. TABLE CONTENT STYLES ---------- */
+/* Using styles from Feedback/Student components */
+.student-info {
+  display: flex;
+  flex-direction: column;
+}
+.student-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.student-roll {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  margin-top: 0.25rem;
+}
+
+.academic-info, .leave-details-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+}
+.leave-date {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.leave-time {
+  font-size: 0.875rem;
+  color: var(--text-light);
+}
+
+.button-text-link {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  margin: 0;
+  text-align: left;
+}
+.button-text-link:hover {
+  text-decoration: underline;
+}
+
+/* Row colors */
+tbody tr.row-approved {
+  background-color: #F0FDF4; /* Green 50 */
+}
+tbody tr.row-rejected {
+  background-color: #FEF2F2; /* Red 50 */
+}
+tbody tr.row-approved:hover { background-color: #DCFCE7; }
+tbody tr.row-rejected:hover { background-color: #FEE2E2; }
+
+.action-completed {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+/* ---------- 6. REUSED STYLES (from other components) ---------- */
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+.status-badge.status-pending {
+  background-color: #FFFBEB; color: #B45309; border-color: #FDE68A;
+}
+.status-badge.status-confirmed {
+  background-color: #F0FDF4; color: #15803D; border-color: #A7F3D0;
+}
+.status-badge.status-rejected {
+  background-color: #FEF2F2; color: #B91C1C; border-color: #FECACA;
+}
+
+.button-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.button-icon .icon {
+  width: 1.1rem; height: 1.1rem;
+}
+.button-icon.confirmed {
+  background-color: var(--success-color); color: white;
+}
+.button-icon.confirmed:hover { background-color: #059669; }
+.button-icon.rejected {
+  background-color: var(--danger-color); color: white;
+}
+.button-icon.rejected:hover { background-color: #DC2626; }
+.button-icon:disabled {
+  background-color: var(--content-border);
+  opacity: 0.7;
+}
+
+/* ---------- 7. MODAL STYLES (New) ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0; /* top/left/right/bottom = 0 */
+  background-color: rgba(17, 24, 39, 0.5); /* var(--sidebar-bg) at 50% opacity */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  background-color: var(--content-card-bg);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--content-border);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-light);
+  padding: 0.5rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.modal-close .icon {
+  width: 1.25rem; height: 1.25rem;
+}
+
+.modal-close:hover {
+  background-color: var(--content-bg);
+  color: var(--text-secondary);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detail-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.detail-item label {
+  font-weight: 500;
+  color: var(--text-light);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-item span {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.leave-reason-text {
+  background-color: var(--content-bg);
+  border: 1px solid var(--content-border);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin: 0;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  white-space: pre-wrap; /* Respect newlines */
+}
+
+/* ---------- 8. RESPONSIVE (from old CSS) ---------- */
+@media (max-width: 968px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .action-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

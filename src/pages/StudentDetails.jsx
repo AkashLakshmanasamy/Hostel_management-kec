@@ -3,7 +3,26 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
 import { useUser } from "../contexts/UserContext";
-import "../styles/StudentDetails.css";
+// Import our new, self-contained CSS file
+import "../styles/StudentDetails-new.css";
+
+// --- New Icon SVG ---
+const Icon = ({ path, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    className={`icon ${className}`}
+  >
+    <path fillRule="evenodd" d={path} clipRule="evenodd" />
+  </svg>
+);
+
+const ICONS = {
+  upload: "M9.97 4.97a.75.75 0 011.06 0l3 3a.75.75 0 01-1.06 1.06l-1.72-1.72v7.94a.75.75 0 01-1.5 0v-7.94L8.97 9.03a.75.75 0 01-1.06-1.06l3-3zM3.75 12.75A.75.75 0 013 12V8.75a.75.75 0 011.5 0V12a.75.75 0 01-.75.75zM12 12.75a.75.75 0 01-.75-.75V8.75a.75.75 0 011.5 0V12a.75.75 0 01-.75.75zM16.25 12.75a.75.75 0 01-.75-.75V8.75a.75.75 0 011.5 0V12a.75.75 0 01-.75.75zM4 17a1 1 0 01-1-1v-2.25a.75.75 0 011.5 0v2.25a.25.25 0 00.25.25h10.5a.25.25 0 00.25-.25v-2.25a.75.75 0 011.5 0V16a1 1 0 01-1 1H4z",
+  arrow: "M4.75 8.75a.75.75 0 000 1.5h8.514l-2.61 2.61a.75.75 0 101.06 1.06l4.004-4.003a.75.75 0 000-1.06l-4.004-4.004a.75.75 0 00-1.06 1.06l2.61 2.61H4.75z",
+};
+// --- End Icon ---
 
 export default function StudentDetails() {
   const navigate = useNavigate();
@@ -20,6 +39,7 @@ export default function StudentDetails() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
 
+  // --- All functionality below is 100% UNCHANGED ---
   useEffect(() => {
     if (!user) {
       console.warn("⚠ No logged-in user found.");
@@ -52,35 +72,26 @@ export default function StudentDetails() {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
     setIsSubmitting(true);
 
     try {
       let receiptUrl = null;
-
-      // Handle receipt upload
       if (receipt) {
         console.log("Uploading receipt...");
-        // Optional: check if bucket exists
         const { data: buckets } = await supabase.storage.listBuckets();
         if (!buckets.find((b) => b.name === "receipts")) {
           await supabase.storage.createBucket("receipts", { public: true });
         }
-
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from("receipts")
           .upload(`receipts/${Date.now()}_${receipt.name}`, receipt);
-
         if (uploadError) throw uploadError;
-
         const { data: { publicUrl } } = supabase.storage
           .from("receipts")
           .getPublicUrl(uploadData.path);
-
         receiptUrl = publicUrl;
       }
-
-      // Insert student details
+      
       const { data: studentData, error: insertError } = await supabase
         .from("students")
         .insert([
@@ -94,7 +105,6 @@ export default function StudentDetails() {
           },
         ])
         .select();
-
       if (insertError) throw insertError;
 
       alert("Student details saved successfully!");
@@ -106,138 +116,134 @@ export default function StudentDetails() {
       setIsSubmitting(false);
     }
   };
+  // --- End of unchanged functionality ---
 
   return (
-    <div className="student-details-container">
-      <div className="student-details-overlay"></div>
-      
+    // New class names for our new design
+    <div className="student-details-page">
       <div className="student-details-card">
         <div className="student-details-header">
-          <div className="university-logo">
-            <h2>Kongu Engineering College</h2>
-            <p>Hostel Management System</p>
-          </div>
+          <h2>Kongu Engineering College</h2>
+          <p>Hostel Management System</p>
         </div>
 
-        <div className="form-content">
+        <form onSubmit={onSubmit} className="student-details-form">
           <div className="form-intro">
-            <h2>Student Information</h2>
-            <p>Please provide your details to proceed with room allocation</p>
+            <h3>Student Information</h3>
+            <p>Please provide your details to proceed.</p>
           </div>
 
-          <form onSubmit={onSubmit} className="student-details-form">
-            <div className="form-grid">
-              {/* Name */}
-              <div className="form-group">
-                <label htmlFor="name">Full Name</label>
-                <input
-                  id="name"
-                  name="name"
-                  value={form.name}
-                  onChange={onChange}
-                  required
-                  className={errors.name ? "error" : ""}
-                  placeholder="Enter your full name"
-                />
-                {errors.name && <span className="error-text">{errors.name}</span>}
-              </div>
-
-              {/* Reg No */}
-              <div className="form-group">
-                <label htmlFor="regNo">Registration Number</label>
-                <input
-                  id="regNo"
-                  name="regNo"
-                  value={form.regNo}
-                  onChange={onChange}
-                  required
-                  className={errors.regNo ? "error" : ""}
-                  placeholder="e.g., 23CDR005"
-                />
-                {errors.regNo && <span className="error-text">{errors.regNo}</span>}
-              </div>
-
-              {/* Department */}
-              <div className="form-group">
-                <label htmlFor="department">Department</label>
-                <select
-                  id="department"
-                  name="department"
-                  value={form.department}
-                  onChange={onChange}
-                  className={errors.department ? "error select-input" : "select-input"}
-                >
-                  <option value="">Select Department</option>
-                  <option value="Computer Science">Computer Science</option>
-                  <option value="Information Technology">Information Technology</option>
-                  <option value="Mechanical Engineering">Mechanical Engineering</option>
-                  <option value="Civil Engineering">Civil Engineering</option>
-                  <option value="Electronics and Communication">Electronics and Communication</option>
-                  <option value="Electrical Engineering">Electrical Engineering</option>
-                  <option value="Automobile Engineering">Automobile Engineering</option>
-                  <option value="Food Technology">Food Technology</option>
-                </select>
-                {errors.department && (
-                  <span className="error-text">{errors.department}</span>
-                )}
-              </div>
-
-              {/* Fees */}
-              <div className="form-group">
-                <label htmlFor="feesStatus">Fees Status</label>
-                <select
-                  id="feesStatus"
-                  name="feesStatus"
-                  value={form.feesStatus}
-                  onChange={onChange}
-                  className="select-input"
-                >
-                  <option value="Paid">Paid</option>
-                  <option value="Unpaid">Unpaid</option>
-                </select>
-              </div>
+          <div className="form-grid">
+            {/* Name */}
+            <div className="form-group">
+              <label htmlFor="name">Full Name</label>
+              <input
+                id="name"
+                name="name"
+                value={form.name}
+                onChange={onChange}
+                required
+                className={errors.name ? "input-error" : ""}
+                placeholder="Enter your full name"
+              />
+              {errors.name && <span className="error-text">{errors.name}</span>}
             </div>
 
-            {/* Receipt Upload */}
-            <div className="form-group full-width">
-              <label htmlFor="receipt" className="file-label">
-                Upload Fees Receipt (PDF/Image)
-              </label>
-              <div className="file-input-container">
-                <input
-                  id="receipt"
-                  type="file"
-                  accept=".pdf,.jpg,.jpeg,.png"
-                  onChange={handleFileChange}
-                  style={{ opacity: 0, position: "absolute", zIndex: -1 }}
-                />
-                <label htmlFor="receipt" className="file-button">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                  </svg>
-                  Choose File
-                </label>
-                <span className="file-name">{receipt ? receipt.name : "No file chosen"}</span>
-              </div>
-              <p className="file-hint">Maximum file size: 5MB</p>
+            {/* Reg No */}
+            <div className="form-group">
+              <label htmlFor="regNo">Registration Number</label>
+              <input
+                id="regNo"
+                name="regNo"
+                value={form.regNo}
+                onChange={onChange}
+                required
+                className={errors.regNo ? "input-error" : ""}
+                placeholder="e.g., 23CDR005"
+              />
+              {errors.regNo && <span className="error-text">{errors.regNo}</span>}
             </div>
 
-            <button
-              type="submit"
-              className={`submit-btn ${isSubmitting ? "submitting" : ""}`}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <span className="spinner"></span> Processing...
-                </>
-              ) : (
-                "Save & Continue to Room Selection"
+            {/* Department */}
+            <div className="form-group">
+              <label htmlFor="department">Department</label>
+              <select
+                id="department"
+                name="department"
+                value={form.department}
+                onChange={onChange}
+                className={errors.department ? "input-error" : ""}
+                required
+              >
+                <option value="">Select Department</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Civil Engineering">Civil Engineering</option>
+                <option value="Electronics and Communication">Electronics and Communication</option>
+                <option value="Electrical Engineering">Electrical Engineering</option>
+                <option value="Automobile Engineering">Automobile Engineering</option>
+                <option value="Food Technology">Food Technology</option>
+              </select>
+              {errors.department && (
+                <span className="error-text">{errors.department}</span>
               )}
-            </button>
-          </form>
-        </div>
+            </div>
+
+            {/* Fees */}
+            <div className="form-group">
+              <label htmlFor="feesStatus">Fees Status</label>
+              <select
+                id="feesStatus"
+                name="feesStatus"
+                value={form.feesStatus}
+                onChange={onChange}
+              >
+                <option value="Paid">Paid</option>
+                <option value="Unpaid">Unpaid</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Receipt Upload */}
+          <div className="form-group form-group-full">
+            <label htmlFor="receipt">Upload Fees Receipt (PDF/Image)</label>
+            <label htmlFor="receipt" className="file-upload-label">
+              <input
+                id="receipt"
+                type="file"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onChange={handleFileChange}
+                className="hidden-file-input"
+              />
+              <span className="file-upload-button">
+                <Icon path={ICONS.upload} />
+                Choose File
+              </span>
+              <span className="file-name-display">
+                {receipt ? receipt.name : "No file chosen"}
+              </span>
+            </label>
+            <p className="file-hint">Maximum file size: 5MB</p>
+          </div>
+
+          <button
+            type="submit"
+            className="submit-btn"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <span className="spinner"></span> Processing...
+              </>
+            ) : (
+              <>
+                Save & Continue
+                <Icon path={ICONS.arrow} />
+              </>
+            )}
+          </button>
+        </form>
       </div>
     </div>
   );

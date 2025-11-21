@@ -2,20 +2,33 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
 import { useUser } from "../contexts/UserContext";
-import "../styles/StudentProfile.css";
+// Import the new professional CSS
+import "../styles/StudentProfile-new.css";
+
+// --- Icons ---
+const Icon = ({ path, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    className={`icon ${className}`}
+  >
+    <path fillRule="evenodd" d={path} clipRule="evenodd" />
+  </svg>
+);
+
+const ICONS = {
+  user: "M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z",
+  contact: "M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z",
+  family: "M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z",
+  academic: "M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z",
+  upload: "M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z",
+  save: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z",
+  image: "M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+};
 
 const FLOORS = ["Ground", "First", "Second", "Third", "Dining First", "Dining Second"];
-const DEPARTMENTS = [
-  "Computer Science and Design",
-  "Computer Science",
-  "Information Technology",
-  "Mechanical Engineering",
-  "Civil Engineering",
-  "Electronics and Communication",
-  "Electrical Engineering",
-  "Automobile Engineering",
-  "Food Technology",
-];
+const DEPARTMENTS = [ "Computer Science and Design", "Computer Science", "Information Technology", "Mechanical Engineering", "Civil Engineering", "Electronics and Communication", "Electrical Engineering", "Automobile Engineering", "Food Technology" ];
 const YEARS = ["I", "II", "III", "IV"];
 const SECTIONS = ["A", "B", "C", "D"];
 const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
@@ -26,28 +39,10 @@ export default function StudentProfile() {
   const { user } = useUser();
 
   const [form, setForm] = useState({
-    floor: "",
-    roomNo: "",
-    department: "",
-    rollNo: "",
-    name: "",
-    year: "",
-    section: "",
-    mobile: "",
-    whatsapp: "",
-    email: "",
-    bloodGroup: "",
-    fatherName: "",
-    fatherContact: "",
-    fatherOccupation: "",
-    motherName: "",
-    motherContact: "",
-    motherOccupation: "",
-    dob: "",
-    address: "",
-    district: "",
-    admissionMode: "",
-    feeMode: "",
+    floor: "", roomNo: "", department: "", rollNo: "", name: "", year: "", section: "",
+    mobile: "", whatsapp: "", email: "", bloodGroup: "", fatherName: "", fatherContact: "",
+    fatherOccupation: "", motherName: "", motherContact: "", motherOccupation: "",
+    dob: "", address: "", district: "", admissionMode: "", feeMode: "",
   });
 
   const [passportPhoto, setPassportPhoto] = useState(null);
@@ -60,58 +55,32 @@ export default function StudentProfile() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Load existing profile
+  // --- Logic remains 100% UNCHANGED ---
   useEffect(() => {
     if (!user) return;
-
     setForm(prev => ({ ...prev, email: user.email || "" }));
-
     const fetchProfile = async () => {
       try {
-        const { data, error } = await supabase
-          .from("student_profiles")
-          .select("*")
-          .eq("user_id", user.id)
-          .single();
-
+        const { data, error } = await supabase.from("student_profiles").select("*").eq("user_id", user.id).single();
         if (error && error.code !== "PGRST116") throw error;
         if (data) {
           setForm({
-            floor: data.floor || "",
-            roomNo: data.room_no || "",
-            department: data.department || "",
-            rollNo: data.roll_no || "",
-            name: data.name || "",
-            year: data.year || "",
-            section: data.section || "",
-            mobile: data.mobile || "",
-            whatsapp: data.whatsapp || "",
-            email: data.email || "",
-            bloodGroup: data.blood_group || "",
-            fatherName: data.father_name || "",
-            fatherContact: data.father_contact || "",
-            fatherOccupation: data.father_occupation || "",
-            motherName: data.mother_name || "",
-            motherContact: data.mother_contact || "",
-            motherOccupation: data.mother_occupation || "",
-            dob: data.dob || "",
-            address: data.address || "",
-            district: data.district || "",
-            admissionMode: data.admission_mode || "",
-            feeMode: data.fee_mode || "",
+            floor: data.floor || "", roomNo: data.room_no || "", department: data.department || "",
+            rollNo: data.roll_no || "", name: data.name || "", year: data.year || "", section: data.section || "",
+            mobile: data.mobile || "", whatsapp: data.whatsapp || "", email: data.email || "",
+            bloodGroup: data.blood_group || "", fatherName: data.father_name || "", fatherContact: data.father_contact || "",
+            fatherOccupation: data.father_occupation || "", motherName: data.mother_name || "", motherContact: data.mother_contact || "",
+            motherOccupation: data.mother_occupation || "", dob: data.dob || "", address: data.address || "",
+            district: data.district || "", admissionMode: data.admission_mode || "", feeMode: data.fee_mode || "",
           });
-          
-          // Set preview URLs if they exist
           if (data.passport_photo_url) setPassportPreview(data.passport_photo_url);
           if (data.id_card_photo_url) setIdCardPreview(data.id_card_photo_url);
           if (data.fees_receipt_url) setFeesPreview(data.fees_receipt_url);
         }
-      } catch (err) {
-        console.error("Error fetching profile:", err.message);
-      }
+      } catch (err) { console.error("Error fetching profile:", err.message); }
     };
-
     fetchProfile();
   }, [user]);
 
@@ -124,19 +93,10 @@ export default function StudentProfile() {
   const handleFileChange = (setter, setPreview) => (e) => {
     const file = e.target.files?.[0] || null;
     if (!file) return;
-    
-    if (file.size > 10 * 1024 * 1024) {
-      alert("File size must be under 10MB");
-      return;
-    }
-    
+    if (file.size > 10 * 1024 * 1024) { setErrorMessage("File size must be under 10MB"); return; }
     setter(file);
-    
-    // Create preview
     const reader = new FileReader();
-    reader.onload = () => {
-      setPreview(reader.result);
-    };
+    reader.onload = () => { setPreview(reader.result); };
     reader.readAsDataURL(file);
   };
 
@@ -148,542 +108,288 @@ export default function StudentProfile() {
       "motherName", "motherContact", "dob", "address", "district",
       "admissionMode", "feeMode"
     ];
-
-    requiredFields.forEach(f => {
-      if (!form[f]?.trim()) newErrors[f] = "This field is required";
-    });
-
-    if (form.mobile && !/^\d{10}$/.test(form.mobile)) newErrors.mobile = "Enter a valid 10-digit number";
-    if (form.whatsapp && !/^\d{10}$/.test(form.whatsapp)) newErrors.whatsapp = "Enter a valid 10-digit number";
-    if (form.fatherContact && !/^\d{10}$/.test(form.fatherContact)) newErrors.fatherContact = "Enter a valid 10-digit number";
-    if (form.motherContact && !/^\d{10}$/.test(form.motherContact)) newErrors.motherContact = "Enter a valid 10-digit number";
-
-    if (!passportPhoto && !passportPreview) newErrors.passportPhoto = "Upload required";
-    if (!idCardPhoto && !idCardPreview) newErrors.idCardPhoto = "Upload required";
-    if (!feesReceipt && !feesPreview) newErrors.feesReceipt = "Upload required";
-
+    requiredFields.forEach(f => { if (!form[f]?.trim()) newErrors[f] = "Required"; });
+    if (form.mobile && !/^\d{10}$/.test(form.mobile)) newErrors.mobile = "Invalid No.";
+    if (form.whatsapp && !/^\d{10}$/.test(form.whatsapp)) newErrors.whatsapp = "Invalid No.";
+    if (form.fatherContact && !/^\d{10}$/.test(form.fatherContact)) newErrors.fatherContact = "Invalid No.";
+    if (form.motherContact && !/^\d{10}$/.test(form.motherContact)) newErrors.motherContact = "Invalid No.";
+    if (!passportPhoto && !passportPreview) newErrors.passportPhoto = "Required";
+    if (!idCardPhoto && !idCardPreview) newErrors.idCardPhoto = "Required";
+    if (!feesReceipt && !feesPreview) newErrors.feesReceipt = "Required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    setErrorMessage("");
+    if (!validateForm()) { setErrorMessage("Please fill out all required fields."); return; }
     if (!user || !user.id) return alert("User not loaded yet.");
-
     setIsSubmitting(true);
     setSuccessMessage("");
-
     try {
       const uploadFile = async (file, folder) => {
         if (!file) return null;
         const fileName = `${user.id}_${Date.now()}_${file.name}`;
-        const { data, error } = await supabase.storage
-          .from("student-files")
-          .upload(`${folder}/${fileName}`, file, { upsert: true });
-
+        const { data, error } = await supabase.storage.from("student-files").upload(`${folder}/${fileName}`, file, { upsert: true });
         if (error) throw error;
-
-        const { data: publicData } = supabase.storage
-          .from("student-files")
-          .getPublicUrl(`${folder}/${fileName}`);
-
+        const { data: publicData } = supabase.storage.from("student-files").getPublicUrl(`${folder}/${fileName}`);
         return publicData.publicUrl;
       };
-
       const passportUrl = passportPhoto ? await uploadFile(passportPhoto, "passport") : passportPreview;
       const idCardUrl = idCardPhoto ? await uploadFile(idCardPhoto, "idcard") : idCardPreview;
       const feesUrl = feesReceipt ? await uploadFile(feesReceipt, "fees") : feesPreview;
 
-      const { error } = await supabase
-        .from("student_profiles")
-        .upsert([{
-          user_id: user.id,
-          floor: form.floor,
-          room_no: form.roomNo,
-          department: form.department,
-          roll_no: form.rollNo,
-          name: form.name,
-          year: form.year,
-          section: form.section,
-          mobile: form.mobile,
-          whatsapp: form.whatsapp,
-          email: form.email,
-          blood_group: form.bloodGroup,
-          father_name: form.fatherName,
-          father_contact: form.fatherContact,
-          father_occupation: form.fatherOccupation,
-          mother_name: form.motherName,
-          mother_contact: form.motherContact,
-          mother_occupation: form.motherOccupation,
-          dob: form.dob,
-          address: form.address,
-          district: form.district,
-          admission_mode: form.admissionMode,
-          fee_mode: form.feeMode,
-          passport_photo_url: passportUrl,
-          id_card_photo_url: idCardUrl,
-          fees_receipt_url: feesUrl,
-        }]);
-
+      const { error } = await supabase.from("student_profiles").upsert([{
+        user_id: user.id, floor: form.floor, room_no: form.roomNo, department: form.department,
+        roll_no: form.rollNo, name: form.name, year: form.year, section: form.section,
+        mobile: form.mobile, whatsapp: form.whatsapp, email: form.email, blood_group: form.bloodGroup,
+        father_name: form.fatherName, father_contact: form.fatherContact, father_occupation: form.fatherOccupation,
+        mother_name: form.motherName, mother_contact: form.motherContact, mother_occupation: form.motherOccupation,
+        dob: form.dob, address: form.address, district: form.district, admission_mode: form.admissionMode,
+        fee_mode: form.feeMode, passport_photo_url: passportUrl, id_card_photo_url: idCardUrl, fees_receipt_url: feesUrl,
+      }]);
       if (error) throw error;
       setSuccessMessage("Profile saved successfully!");
     } catch (err) {
       console.error("Submit error:", err.message);
-      alert("Error saving profile: " + err.message);
-    } finally {
-      setIsSubmitting(false);
-    }
+      setErrorMessage("Error saving profile: " + err.message);
+    } finally { setIsSubmitting(false); }
   };
+  // --- End Logic ---
 
   return (
-    <div className="student-profile-container">
-      <div className="header-section">
-        <h2>STUDENT PROFILE FORM</h2>
-        <p className="note">Please complete all required fields to finalize your student profile</p>
-      </div>
-      
-      {successMessage && (
-        <div className="success-message">
-          <h2>Profile Updated Successfully!</h2>
-          <p>Your student profile has been successfully saved.</p>
-          <button className="submit-btn" onClick={() => setSuccessMessage("")}>
-            Continue Editing
-          </button>
+    <div className="profile-page">
+      <div className="profile-card">
+        <div className="profile-header">
+          <h2>Student Profile</h2>
+          <p>Please complete all required fields to finalize your registration.</p>
         </div>
-      )}
-      
-      <form className="student-profile-form" onSubmit={handleSubmit}>
-        <div className="form-section">
-          <h3>Personal Information</h3>
-          <div className="form-row">
+
+        {successMessage && <div className="alert success">{successMessage}</div>}
+        {errorMessage && <div className="alert error">{errorMessage}</div>}
+
+        <form className="profile-form" onSubmit={handleSubmit}>
+          
+          {/* Section 1: Personal Info */}
+          <div className="form-section-title">
+            <Icon path={ICONS.user} className="section-icon" /> Personal Information
+          </div>
+          <div className="form-grid">
             <div className="form-group">
-              <label htmlFor="name">Full Name: *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={form.name}
-                onChange={onChange}
-                className={errors.name ? 'error' : ''}
-                required
-              />
+              <label htmlFor="name">Full Name *</label>
+              <input type="text" id="name" name="name" value={form.name} onChange={onChange} className={errors.name ? 'error' : ''} />
               {errors.name && <span className="error-text">{errors.name}</span>}
             </div>
-            
             <div className="form-group">
-              <label htmlFor="rollNo">Roll Number: *</label>
-              <input
-                type="text"
-                id="rollNo"
-                name="rollNo"
-                value={form.rollNo}
-                onChange={onChange}
-                className={errors.rollNo ? 'error' : ''}
-                required
-              />
+              <label htmlFor="rollNo">Roll Number *</label>
+              <input type="text" id="rollNo" name="rollNo" value={form.rollNo} onChange={onChange} className={errors.rollNo ? 'error' : ''} />
               {errors.rollNo && <span className="error-text">{errors.rollNo}</span>}
             </div>
-          </div>
-          
-          <div className="form-row">
             <div className="form-group">
-              <label htmlFor="department">Department: *</label>
-              <select
-                id="department"
-                name="department"
-                value={form.department}
-                onChange={onChange}
-                className={errors.department ? 'error' : ''}
-                required
-              >
+              <label htmlFor="dob">Date of Birth *</label>
+              <input type="date" id="dob" name="dob" value={form.dob} onChange={onChange} className={errors.dob ? 'error' : ''} />
+              {errors.dob && <span className="error-text">{errors.dob}</span>}
+            </div>
+            <div className="form-group">
+              <label htmlFor="bloodGroup">Blood Group *</label>
+              <select id="bloodGroup" name="bloodGroup" value={form.bloodGroup} onChange={onChange} className={errors.bloodGroup ? 'error' : ''}>
+                <option value="">Select Group</option>
+                {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
+              </select>
+              {errors.bloodGroup && <span className="error-text">{errors.bloodGroup}</span>}
+            </div>
+            <div className="form-group full-width">
+              <label htmlFor="email">Email Address (Read-Only)</label>
+              <input type="email" id="email" name="email" value={form.email} readOnly className="read-only" />
+            </div>
+          </div>
+
+          {/* Section 2: Academic Info */}
+          <div className="form-divider"></div>
+          <div className="form-section-title">
+            <Icon path={ICONS.academic} className="section-icon" /> Academic Details
+          </div>
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="department">Department *</label>
+              <select id="department" name="department" value={form.department} onChange={onChange} className={errors.department ? 'error' : ''}>
                 <option value="">Select Department</option>
                 {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
               {errors.department && <span className="error-text">{errors.department}</span>}
             </div>
-            
             <div className="form-group">
-              <label htmlFor="year">Year: *</label>
-              <select
-                id="year"
-                name="year"
-                value={form.year}
-                onChange={onChange}
-                className={errors.year ? 'error' : ''}
-                required
-              >
+              <label htmlFor="year">Year *</label>
+              <select id="year" name="year" value={form.year} onChange={onChange} className={errors.year ? 'error' : ''}>
                 <option value="">Select Year</option>
                 {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
               </select>
               {errors.year && <span className="error-text">{errors.year}</span>}
             </div>
-            
             <div className="form-group">
-              <label htmlFor="section">Section: *</label>
-              <select
-                id="section"
-                name="section"
-                value={form.section}
-                onChange={onChange}
-                className={errors.section ? 'error' : ''}
-                required
-              >
+              <label htmlFor="section">Section *</label>
+              <select id="section" name="section" value={form.section} onChange={onChange} className={errors.section ? 'error' : ''}>
                 <option value="">Select Section</option>
                 {SECTIONS.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
               {errors.section && <span className="error-text">{errors.section}</span>}
             </div>
-          </div>
-          
-          <div className="form-row">
             <div className="form-group">
-              <label htmlFor="dob">Date of Birth: *</label>
-              <input
-                type="date"
-                id="dob"
-                name="dob"
-                value={form.dob}
-                onChange={onChange}
-                className={errors.dob ? 'error' : ''}
-                required
-              />
-              {errors.dob && <span className="error-text">{errors.dob}</span>}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="bloodGroup">Blood Group: *</label>
-              <select
-                id="bloodGroup"
-                name="bloodGroup"
-                value={form.bloodGroup}
-                onChange={onChange}
-                className={errors.bloodGroup ? 'error' : ''}
-                required
-              >
-                <option value="">Select Blood Group</option>
-                {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
-              </select>
-              {errors.bloodGroup && <span className="error-text">{errors.bloodGroup}</span>}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="email">Email Address: *</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={form.email}
-                readOnly
-                className="read-only"
-              />
-            </div>
-          </div>
-        </div>
-        
-        <div className="form-section">
-          <h3>Contact Information</h3>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="mobile">Mobile Number: *</label>
-              <input
-                type="text"
-                id="mobile"
-                name="mobile"
-                value={form.mobile}
-                onChange={onChange}
-                className={errors.mobile ? 'error' : ''}
-                required
-              />
-              {errors.mobile && <span className="error-text">{errors.mobile}</span>}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="whatsapp">WhatsApp Number: *</label>
-              <input
-                type="text"
-                id="whatsapp"
-                name="whatsapp"
-                value={form.whatsapp}
-                onChange={onChange}
-                className={errors.whatsapp ? 'error' : ''}
-                required
-              />
-              {errors.whatsapp && <span className="error-text">{errors.whatsapp}</span>}
-            </div>
-          </div>
-        </div>
-        
-        <div className="form-section">
-          <h3>Residence Information</h3>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="floor">Floor: *</label>
-              <select
-                id="floor"
-                name="floor"
-                value={form.floor}
-                onChange={onChange}
-                className={errors.floor ? 'error' : ''}
-                required
-              >
-                <option value="">Select Floor</option>
-                {FLOORS.map(f => <option key={f} value={f}>{f}</option>)}
-              </select>
-              {errors.floor && <span className="error-text">{errors.floor}</span>}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="roomNo">Room Number: *</label>
-              <input
-                type="text"
-                id="roomNo"
-                name="roomNo"
-                value={form.roomNo}
-                onChange={onChange}
-                className={errors.roomNo ? 'error' : ''}
-                required
-              />
-              {errors.roomNo && <span className="error-text">{errors.roomNo}</span>}
-            </div>
-          </div>
-        </div>
-        
-        <div className="form-section">
-          <h3>Parent Information</h3>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="fatherName">Father's Name: *</label>
-              <input
-                type="text"
-                id="fatherName"
-                name="fatherName"
-                value={form.fatherName}
-                onChange={onChange}
-                className={errors.fatherName ? 'error' : ''}
-                required
-              />
-              {errors.fatherName && <span className="error-text">{errors.fatherName}</span>}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="fatherContact">Father's Contact Number: *</label>
-              <input
-                type="text"
-                id="fatherContact"
-                name="fatherContact"
-                value={form.fatherContact}
-                onChange={onChange}
-                className={errors.fatherContact ? 'error' : ''}
-                required
-              />
-              {errors.fatherContact && <span className="error-text">{errors.fatherContact}</span>}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="fatherOccupation">Father's Occupation:</label>
-              <input
-                type="text"
-                id="fatherOccupation"
-                name="fatherOccupation"
-                value={form.fatherOccupation}
-                onChange={onChange}
-              />
-            </div>
-          </div>
-          
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="motherName">Mother's Name: *</label>
-              <input
-                type="text"
-                id="motherName"
-                name="motherName"
-                value={form.motherName}
-                onChange={onChange}
-                className={errors.motherName ? 'error' : ''}
-                required
-              />
-              {errors.motherName && <span className="error-text">{errors.motherName}</span>}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="motherContact">Mother's Contact Number: *</label>
-              <input
-                type="text"
-                id="motherContact"
-                name="motherContact"
-                value={form.motherContact}
-                onChange={onChange}
-                className={errors.motherContact ? 'error' : ''}
-                required
-              />
-              {errors.motherContact && <span className="error-text">{errors.motherContact}</span>}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="motherOccupation">Mother's Occupation:</label>
-              <input
-                type="text"
-                id="motherOccupation"
-                name="motherOccupation"
-                value={form.motherOccupation}
-                onChange={onChange}
-              />
-            </div>
-          </div>
-        </div>
-        
-        <div className="form-section">
-          <h3>Address Information</h3>
-          <div className="form-row">
-            <div className="form-group full-width">
-              <label htmlFor="address">Complete Address: *</label>
-              <textarea
-                id="address"
-                name="address"
-                value={form.address}
-                onChange={onChange}
-                className={errors.address ? 'error' : ''}
-                rows="3"
-                required
-              ></textarea>
-              {errors.address && <span className="error-text">{errors.address}</span>}
-            </div>
-          </div>
-          
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="district">District: *</label>
-              <input
-                type="text"
-                id="district"
-                name="district"
-                value={form.district}
-                onChange={onChange}
-                className={errors.district ? 'error' : ''}
-                required
-              />
-              {errors.district && <span className="error-text">{errors.district}</span>}
-            </div>
-          </div>
-        </div>
-        
-        <div className="form-section">
-          <h3>Admission Details</h3>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="admissionMode">Mode of Admission: *</label>
-              <select
-                id="admissionMode"
-                name="admissionMode"
-                value={form.admissionMode}
-                onChange={onChange}
-                className={errors.admissionMode ? 'error' : ''}
-                required
-              >
+              <label htmlFor="admissionMode">Admission Mode *</label>
+              <select id="admissionMode" name="admissionMode" value={form.admissionMode} onChange={onChange} className={errors.admissionMode ? 'error' : ''}>
                 <option value="">Select Mode</option>
                 {ADMISSION_MODES.map(m => <option key={m} value={m}>{m}</option>)}
               </select>
               {errors.admissionMode && <span className="error-text">{errors.admissionMode}</span>}
             </div>
-            
+          </div>
+
+          {/* Section 3: Contact & Parents */}
+          <div className="form-divider"></div>
+          <div className="form-section-title">
+            <Icon path={ICONS.contact} className="section-icon" /> Contact & Parent Info
+          </div>
+          <div className="form-grid">
             <div className="form-group">
-              <label htmlFor="feeMode">Mode of Fees Payment: *</label>
-              <select
-                id="feeMode"
-                name="feeMode"
-                value={form.feeMode}
-                onChange={onChange}
-                className={errors.feeMode ? 'error' : ''}
-                required
-              >
+              <label htmlFor="mobile">Student Mobile *</label>
+              <input type="tel" id="mobile" name="mobile" value={form.mobile} onChange={onChange} className={errors.mobile ? 'error' : ''} />
+              {errors.mobile && <span className="error-text">{errors.mobile}</span>}
+            </div>
+            <div className="form-group">
+              <label htmlFor="whatsapp">WhatsApp *</label>
+              <input type="tel" id="whatsapp" name="whatsapp" value={form.whatsapp} onChange={onChange} className={errors.whatsapp ? 'error' : ''} />
+              {errors.whatsapp && <span className="error-text">{errors.whatsapp}</span>}
+            </div>
+            <div className="form-group">
+              <label htmlFor="fatherName">Father's Name *</label>
+              <input type="text" id="fatherName" name="fatherName" value={form.fatherName} onChange={onChange} className={errors.fatherName ? 'error' : ''} />
+              {errors.fatherName && <span className="error-text">{errors.fatherName}</span>}
+            </div>
+            <div className="form-group">
+              <label htmlFor="fatherContact">Father's Contact *</label>
+              <input type="tel" id="fatherContact" name="fatherContact" value={form.fatherContact} onChange={onChange} className={errors.fatherContact ? 'error' : ''} />
+              {errors.fatherContact && <span className="error-text">{errors.fatherContact}</span>}
+            </div>
+            <div className="form-group">
+              <label htmlFor="motherName">Mother's Name *</label>
+              <input type="text" id="motherName" name="motherName" value={form.motherName} onChange={onChange} className={errors.motherName ? 'error' : ''} />
+              {errors.motherName && <span className="error-text">{errors.motherName}</span>}
+            </div>
+            <div className="form-group">
+              <label htmlFor="motherContact">Mother's Contact *</label>
+              <input type="tel" id="motherContact" name="motherContact" value={form.motherContact} onChange={onChange} className={errors.motherContact ? 'error' : ''} />
+              {errors.motherContact && <span className="error-text">{errors.motherContact}</span>}
+            </div>
+          </div>
+          
+          <div className="form-group full-width" style={{ marginTop: "1rem" }}>
+            <label htmlFor="address">Permanent Address *</label>
+            <textarea id="address" name="address" value={form.address} onChange={onChange} rows="3" className={errors.address ? 'error' : ''}></textarea>
+            {errors.address && <span className="error-text">{errors.address}</span>}
+          </div>
+          <div className="form-grid">
+             <div className="form-group">
+              <label htmlFor="district">District *</label>
+              <input type="text" id="district" name="district" value={form.district} onChange={onChange} className={errors.district ? 'error' : ''} />
+              {errors.district && <span className="error-text">{errors.district}</span>}
+            </div>
+          </div>
+
+          {/* Section 4: Hostel Info */}
+          <div className="form-divider"></div>
+          <div className="form-section-title">
+            <Icon path={ICONS.family} className="section-icon" /> Hostel Details
+          </div>
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="floor">Floor *</label>
+              <select id="floor" name="floor" value={form.floor} onChange={onChange} className={errors.floor ? 'error' : ''}>
+                <option value="">Select Floor</option>
+                {FLOORS.map(f => <option key={f} value={f}>{f}</option>)}
+              </select>
+              {errors.floor && <span className="error-text">{errors.floor}</span>}
+            </div>
+            <div className="form-group">
+              <label htmlFor="roomNo">Room Number *</label>
+              <input type="text" id="roomNo" name="roomNo" value={form.roomNo} onChange={onChange} className={errors.roomNo ? 'error' : ''} />
+              {errors.roomNo && <span className="error-text">{errors.roomNo}</span>}
+            </div>
+             <div className="form-group">
+              <label htmlFor="feeMode">Fee Payment Mode *</label>
+              <select id="feeMode" name="feeMode" value={form.feeMode} onChange={onChange} className={errors.feeMode ? 'error' : ''}>
                 <option value="">Select Mode</option>
                 {FEE_MODES.map(m => <option key={m} value={m}>{m}</option>)}
               </select>
               {errors.feeMode && <span className="error-text">{errors.feeMode}</span>}
             </div>
           </div>
-        </div>
-        
-        <div className="form-section">
-          <h3>Document Uploads</h3>
-          <div className="form-row documents-grid">
-            <div className="form-group document-upload">
-              <label htmlFor="passportPhoto">Passport Size Photo (JPG/PNG, max 10MB): *</label>
-              <input
-                type="file"
-                id="passportPhoto"
-                name="passportPhoto"
-                onChange={handleFileChange(setPassportPhoto, setPassportPreview)}
-                className={errors.passportPhoto ? 'error' : ''}
-                accept="image/*"
-                required
-              />
-              {errors.passportPhoto && <span className="error-text">{errors.passportPhoto}</span>}
-              {passportPreview && (
-                <div className="preview-container">
-                  <img src={passportPreview} alt="Passport preview" className="preview-image" />
-                </div>
-              )}
+
+          {/* Section 5: Documents */}
+          <div className="form-divider"></div>
+          <div className="form-section-title">
+            <Icon path={ICONS.image} className="section-icon" /> Documents Upload
+          </div>
+          
+          <div className="upload-grid">
+            {/* Passport Photo */}
+            <div className="upload-card">
+              <label>Passport Photo *</label>
+              <div className="upload-area">
+                {passportPreview ? (
+                  <img src={passportPreview} alt="Preview" className="img-preview" />
+                ) : (
+                  <div className="placeholder"><Icon path={ICONS.image} /></div>
+                )}
+                <input type="file" onChange={handleFileChange(setPassportPhoto, setPassportPreview)} accept="image/*" className="file-input" />
+              </div>
+              {errors.passportPhoto && <span className="error-text-center">{errors.passportPhoto}</span>}
             </div>
-            
-            <div className="form-group document-upload">
-              <label htmlFor="idCardPhoto">ID Card Photo (Front & Back, JPG/PNG/PDF, max 10MB): *</label>
-              <input
-                type="file"
-                id="idCardPhoto"
-                name="idCardPhoto"
-                onChange={handleFileChange(setIdCardPhoto, setIdCardPreview)}
-                className={errors.idCardPhoto ? 'error' : ''}
-                accept="image/*,application/pdf"
-                required
-              />
-              {errors.idCardPhoto && <span className="error-text">{errors.idCardPhoto}</span>}
-              {idCardPreview && (
-                <div className="preview-container">
-                  {idCardPreview.endsWith('.pdf') ? (
-                    <a href={idCardPreview} target="_blank" rel="noopener noreferrer" className="document-link">View PDF</a>
-                  ) : (
-                    <img src={idCardPreview} alt="ID Card preview" className="preview-image" />
-                  )}
-                </div>
-              )}
+
+            {/* ID Card */}
+            <div className="upload-card">
+              <label>ID Card *</label>
+              <div className="upload-area">
+                {idCardPreview ? (
+                  idCardPreview.endsWith('.pdf') ? <div className="pdf-preview">PDF Selected</div> : <img src={idCardPreview} alt="Preview" className="img-preview" />
+                ) : (
+                  <div className="placeholder"><Icon path={ICONS.image} /></div>
+                )}
+                <input type="file" onChange={handleFileChange(setIdCardPhoto, setIdCardPreview)} accept="image/*,application/pdf" className="file-input" />
+              </div>
+              {errors.idCardPhoto && <span className="error-text-center">{errors.idCardPhoto}</span>}
             </div>
-            
-            <div className="form-group document-upload">
-              <label htmlFor="feesReceipt">Fees Receipt (JPG/PNG/PDF, max 10MB): *</label>
-              <input
-                type="file"
-                id="feesReceipt"
-                name="feesReceipt"
-                onChange={handleFileChange(setFeesReceipt, setFeesPreview)}
-                className={errors.feesReceipt ? 'error' : ''}
-                accept="image/*,application/pdf"
-                required
-              />
-              {errors.feesReceipt && <span className="error-text">{errors.feesReceipt}</span>}
-              {feesPreview && (
-                <div className="preview-container">
-                  {feesPreview.endsWith('.pdf') ? (
-                    <a href={feesPreview} target="_blank" rel="noopener noreferrer" className="document-link">View PDF</a>
-                  ) : (
-                    <img src={feesPreview} alt="Fees receipt preview" className="preview-image" />
-                  )}
-                </div>
-              )}
+
+            {/* Fees Receipt */}
+            <div className="upload-card">
+              <label>Fees Receipt *</label>
+              <div className="upload-area">
+                {feesPreview ? (
+                  feesPreview.endsWith('.pdf') ? <div className="pdf-preview">PDF Selected</div> : <img src={feesPreview} alt="Preview" className="img-preview" />
+                ) : (
+                  <div className="placeholder"><Icon path={ICONS.image} /></div>
+                )}
+                <input type="file" onChange={handleFileChange(setFeesReceipt, setFeesPreview)} accept="image/*,application/pdf" className="file-input" />
+              </div>
+              {errors.feesReceipt && <span className="error-text-center">{errors.feesReceipt}</span>}
             </div>
           </div>
-        </div>
-        
-        <div className="form-note">
-          <p><strong>Note:</strong> All fields marked with an asterisk (*) are required.</p>
-        </div>
-        
-        <button type="submit" className="submit-btn" disabled={isSubmitting}>
-          {isSubmitting ? "Saving Profile..." : "Save Profile"}
-        </button>
-      </form>
+
+          <button type="submit" className="submit-btn" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <span className="spinner"></span> Saving...
+              </>
+            ) : (
+              <>
+                Save Profile
+                <Icon path={ICONS.save} />
+              </>
+            )}
+          </button>
+
+        </form>
+      </div>
     </div>
   );
 }

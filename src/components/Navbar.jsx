@@ -3,8 +3,18 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabase";
 import { useUser } from "../contexts/UserContext";
-import "../styles/Navbar.css";
+// Import new CSS
+import "../styles/Navbar-new.css"; 
 import logo from "../assets/logo.png";
+
+// Logout Icon SVG
+const LogoutIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+    <polyline points="16 17 21 12 16 7"></polyline>
+    <line x1="21" y1="12" x2="9" y2="12"></line>
+  </svg>
+);
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -15,53 +25,54 @@ export default function Navbar() {
     await supabase.auth.signOut();
     setUser(null);
     navigate("/login");
+    setIsMenuOpen(false);
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
 
   if (!user) return null;
 
   return (
     <nav className="navbar">
-      {/* Branding */}
-      <div className="navbar-brand">
-        <img src={logo} alt="Kongu Hostel Logo" className="navbar-logo" />
-        <h1 className="navbar-title">KONGU HOSTELS</h1>
-      </div>
+      <div className="navbar-container">
+        
+        {/* Branding */}
+        <div className="navbar-brand" onClick={() => navigate("/")}>
+          <img src={logo} alt="Logo" className="navbar-logo" />
+          <div className="brand-text">
+            <h1>KONGU HOSTELS</h1>
+            <span>Student Portal</span>
+          </div>
+        </div>
 
-      {/* Navigation Links */}
-      <ul className={`navbar-links ${isMenuOpen ? "active" : ""}`}>
-        <li>
-          <NavLink to="/profile" className={({ isActive }) => (isActive ? "active" : "")} onClick={() => setIsMenuOpen(false)}>Profile</NavLink>
-        </li>
-        <li>
-          <NavLink to="/room-allocation" className={({ isActive }) => (isActive ? "active" : "")} onClick={() => setIsMenuOpen(false)}>Rooms</NavLink>
-        </li>
-        <li>
-          <NavLink to="/feedback" className={({ isActive }) => (isActive ? "active" : "")} onClick={() => setIsMenuOpen(false)}>Feedback</NavLink>
-        </li>
-        <li>
-          <NavLink to="/leave" className={({ isActive }) => (isActive ? "active" : "")} onClick={() => setIsMenuOpen(false)}>Leave</NavLink>
-        </li>
-        <li>
-          <NavLink to="/schedule" className={({ isActive }) => (isActive ? "active" : "")} onClick={() => setIsMenuOpen(false)}>Menu</NavLink>
-        </li>
-        <li>
-          <NavLink to="/rules" className={({ isActive }) => (isActive ? "active" : "")} onClick={() => setIsMenuOpen(false)}>Rules</NavLink>
-        </li>
-      </ul>
+        {/* Hamburger Toggle (Mobile) */}
+        <div className={`navbar-toggle ${isMenuOpen ? "open" : ""}`} onClick={toggleMenu}>
+          <span className="bar top"></span>
+          <span className="bar middle"></span>
+          <span className="bar bottom"></span>
+        </div>
 
-      {/* User Info */}
-      <div className="navbar-user">
-        <span className="user-welcome">Welcome, {user.email}</span>
-        <button onClick={handleLogout} className="logout-btn">Logout</button>
-      </div>
+        {/* Navigation Links & User Actions */}
+        <div className={`navbar-menu ${isMenuOpen ? "active" : ""}`}>
+          <ul className="nav-links">
+            <li><NavLink to="/profile" onClick={closeMenu}>Profile</NavLink></li>
+            <li><NavLink to="/room-allocation" onClick={closeMenu}>Rooms</NavLink></li>
+            <li><NavLink to="/feedback" onClick={closeMenu}>Feedback</NavLink></li>
+            <li><NavLink to="/leave" onClick={closeMenu}>Leave</NavLink></li>
+            <li><NavLink to="/schedule" onClick={closeMenu}>Menu</NavLink></li>
+            <li><NavLink to="/rules" onClick={closeMenu}>Rules</NavLink></li>
+          </ul>
 
-      {/* Hamburger Toggle */}
-      <div className={`navbar-toggle ${isMenuOpen ? "active" : ""}`} onClick={toggleMenu}>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
+          <div className="nav-user-actions">
+            <span className="user-email">{user.email}</span>
+            <button onClick={handleLogout} className="logout-btn">
+              <span>Logout</span>
+              <LogoutIcon />
+            </button>
+          </div>
+        </div>
+
       </div>
     </nav>
   );

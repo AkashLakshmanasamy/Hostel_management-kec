@@ -1,0 +1,138 @@
+/* src/styles/VacantRooms-new.css */
+/* This file RELIES on AdminDashboard.css for base styles */
+
+/* ---------- 1. COMPONENT LAYOUT & HEADER ---------- */
+.vacant-rooms-layout {
+  width: 100%;
+}
+
+/* This component uses the same header as FeedbackManagement */
+.component-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.component-header-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  margin: 0;
+}
+
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.filter-group label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+/* ---------- 2. ROOM GRID STYLES ---------- */
+
+.room-grid {
+  display: grid;
+  /* Use auto-fill to create a responsive grid */
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.room-card {
+  background-color: var(--content-card-bg);
+  border: 1px solid var(--content-border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.room-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-color-light);
+}
+
+.room-card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+}
+
+.bed-status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2x2 grid */
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.bed-indicator {
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+}
+
+/* Bed Status Colors */
+.bed-indicator.bed-free {
+  background-color: #F0FDF4; /* Green 50 */
+  color: #15803D; /* Green 700 */
+  border-color: #A7F3D0; /* Green 200 */
+}
+
+.bed-indicator.bed-booked {
+  background-color: #FEF2F2; /* Red 50 */
+  color: #B91C1C; /* Red 700 */
+  border-color: #FECACA; /* Red 200 */
+}
+
+/* Special style for the admin's own bed */
+.bed-indicator.bed-admin {
+  background-color: #EFF6FF; /* Blue 50 */
+  color: #1E40AF; /* Blue 800 */
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-color-light); /* Outer glow */
+  font-weight: 700;
+}
+
+.room-card-footer {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-text.status-free {
+  color: var(--success-color);
+}
+
+.status-text.status-full {
+  color: var(--danger-color);
+}
+
+/* ---------- 3. RESPONSIVE ---------- */
+
+@media (max-width: 640px) {
+  .room-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .room-card {
+    padding: 0.75rem;
+  }
+
+  .room-card-title {
+    font-size: 1rem;
+  }
+}
