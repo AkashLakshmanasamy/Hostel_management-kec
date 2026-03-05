@@ -207,7 +207,6 @@ export default function LeaveManagement() {
 
   return (
     <div className="leave-layout">
-      {/* Use standard component header */}
       <div className="component-header">
         <div className="component-header-left">
           <h2 className="component-header-title">Leave Applications</h2>
@@ -235,7 +234,6 @@ export default function LeaveManagement() {
         </div>
       )}
 
-      {/* Stats Grid (reusing styles from Feedback) */}
       <div className="stats-grid">
         <div className="stat-card">
           <span className="stat-label">Total Leaves</span>
@@ -255,7 +253,6 @@ export default function LeaveManagement() {
         </div>
       </div>
 
-      {/* Signature upload section (new styled card) */}
       <div className="card-section">
         <div className="card-section-header">
           <h3>Admin Signature</h3>
@@ -285,7 +282,6 @@ export default function LeaveManagement() {
         </div>
       </div>
 
-      {/* Leaves table */}
       {filteredLeaves.length === 0 ? (
         <div className="empty-state">
           <div className="empty-state-icon">📝</div>
@@ -377,7 +373,6 @@ export default function LeaveManagement() {
         </div>
       )}
 
-      {/* Modal for leave details (new styles) */}
       {showModal && selectedLeave && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>

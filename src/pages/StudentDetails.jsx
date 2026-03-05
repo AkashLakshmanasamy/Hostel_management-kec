@@ -134,7 +134,6 @@ export default function StudentDetails() {
           </div>
 
           <div className="form-grid">
-            {/* Name */}
             <div className="form-group">
               <label htmlFor="name">Full Name</label>
               <input
@@ -149,7 +148,6 @@ export default function StudentDetails() {
               {errors.name && <span className="error-text">{errors.name}</span>}
             </div>
 
-            {/* Reg No */}
             <div className="form-group">
               <label htmlFor="regNo">Registration Number</label>
               <input
@@ -164,7 +162,6 @@ export default function StudentDetails() {
               {errors.regNo && <span className="error-text">{errors.regNo}</span>}
             </div>
 
-            {/* Department */}
             <div className="form-group">
               <label htmlFor="department">Department</label>
               <select
@@ -190,7 +187,6 @@ export default function StudentDetails() {
               )}
             </div>
 
-            {/* Fees */}
             <div className="form-group">
               <label htmlFor="feesStatus">Fees Status</label>
               <select
@@ -205,7 +201,6 @@ export default function StudentDetails() {
             </div>
           </div>
 
-          {/* Receipt Upload */}
           <div className="form-group form-group-full">
             <label htmlFor="receipt">Upload Fees Receipt (PDF/Image)</label>
             <label htmlFor="receipt" className="file-upload-label">

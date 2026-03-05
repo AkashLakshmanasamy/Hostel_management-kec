@@ -88,7 +88,6 @@ export default function StudentProfiles() {
         <h1 className="text-3xl font-bold tracking-tight">Student Profiles</h1>
       </div>
 
-      {/* REFACTORED: Stat cards with icons and charts */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -134,7 +133,6 @@ export default function StudentProfiles() {
         </Card>
       </div>
 
-      {/* REFACTORED: Main data table card */}
       <Card>
         <CardHeader>
           <CardTitle>Student Directory</CardTitle>

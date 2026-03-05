@@ -348,7 +348,6 @@ export default function StudentRoomAllocation() {
 
         <form onSubmit={handleSubmit} className="allocation-form">
           
-          {/* Section 1: Student Info */}
           <div className="form-section-title">
             <Icon path={ICONS.user} className="section-icon" /> Student Details
           </div>
@@ -392,7 +391,6 @@ export default function StudentRoomAllocation() {
             </div>
           </div>
 
-          {/* Section 2: Room Preference */}
           <div className="form-divider"></div>
           <div className="form-section-title">
             <Icon path={ICONS.building} className="section-icon" /> Room Preference
@@ -409,7 +407,6 @@ export default function StudentRoomAllocation() {
             </div>
           </div>
 
-          {/* Section 3: Upload */}
           <div className="form-divider"></div>
           <div className="form-group full-width">
             <label className="file-upload-label">
@@ -425,7 +422,6 @@ export default function StudentRoomAllocation() {
             {errors.receipt && <span className="error-text">{errors.receipt}</span>}
           </div>
 
-          {/* Section 4: Grid */}
           <div className="form-divider"></div>
           <div className="form-group full-width">
             <label className="grid-label">Select Bed ({form.hostel} - {form.floor})</label>
@@ -455,7 +451,6 @@ export default function StudentRoomAllocation() {
           </button>
         </form>
 
-        {/* Success Modal */}
         {showConfirmation && (
           <div className="modal-overlay">
             <div className="confirmation-modal">

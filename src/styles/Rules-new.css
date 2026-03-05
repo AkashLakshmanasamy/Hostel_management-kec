@@ -1,4 +1,3 @@
-/* src/styles/Rules-new.css */
 
 /* ---------- 
    1. ROOT & VARIABLES 
@@ -6,7 +5,6 @@
 :root {
   --sidebar-bg: #111827; 
   
-  /* ✅ NAVY BLUE GRADIENT (Consistent Theme) */
   --primary-gradient: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
 
   --accent-color: #2c5282; 
@@ -261,7 +259,6 @@ body {
   font-size: 0.95rem;
 }
 
-/* Severity Levels */
 .consequence-item.level-1 {
   background-color: #FFFBEB; /* Yellow */
   border-left-color: #F59E0B;

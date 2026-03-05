@@ -1,4 +1,3 @@
-/* src/styles/AdminDashboard.css */
 
 /* ---------- 
    1. ROOT & VARIABLES
@@ -152,7 +151,6 @@ body {
    Styling for tables, buttons, inputs etc. (inside child components)
    ---------- */
 
-/* ----- Tables ----- */
 table {
   width: 100%;
   border-collapse: separate;
@@ -190,7 +188,6 @@ tbody tr:hover {
   background-color: var(--content-bg);
 }
 
-/* ----- Buttons (Base) ----- */
 button {
   padding: 0.5rem 1rem;
   border: none;
@@ -222,7 +219,6 @@ button:disabled {
   box-shadow: none;
 }
 
-/* ----- Action Button Colors ----- */
 button.confirmed, 
 button.admin-btn-confirm {
   background-color: var(--success-color);
@@ -251,7 +247,6 @@ button.resolve:hover {
   background-color: #D97706;
 }
 
-/* ----- Forms & Inputs ----- */
 input[type="text"], 
 select {
   padding: 0.65rem 0.75rem;
@@ -272,7 +267,6 @@ select:focus {
   box-shadow: 0 0 0 3px var(--primary-color-light);
 }
 
-/* ----- Room Grid (from old CSS) ----- */
 .vacant-rooms {
   display: flex;
   flex-direction: column;
@@ -315,7 +309,6 @@ select:focus {
   color: #881337;
 }
 
-/* ----- Status Indicators ----- */
 .status-indicator {
   display: inline-block;
   width: 10px;
@@ -340,7 +333,6 @@ select:focus {
     height: auto;
     flex-direction: row;
     overflow-x: auto;
-    /* Hide header on mobile, it's redundant */
     .admin-sidebar-header { 
       display: none;
     }
@@ -373,7 +365,6 @@ select:focus {
     padding: 1rem;
   }
 
-  /* Responsive Table (from old CSS, it's a good pattern) */
   thead {
     display: none;
   }

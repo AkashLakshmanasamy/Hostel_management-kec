@@ -74,13 +74,11 @@ export default function RoomAllocation() {
     <div className="allocation-page">
       <div className="allocation-card">
         
-        {/* Header */}
         <div className="allocation-header">
           <h2>Hostel Room Overview</h2>
           <p>View real-time availability of rooms and beds.</p>
         </div>
 
-        {/* Filter Section */}
         <div className="filter-section">
           <div className="filter-title">
             <Icon path={ICONS.search} className="filter-icon" /> 
@@ -116,7 +114,6 @@ export default function RoomAllocation() {
           </div>
         </div>
 
-        {/* Content Area */}
         <div className="content-area">
           <div className="section-header-row">
              <h3>{hostel} Hostel - {floor} Floor</h3>

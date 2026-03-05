@@ -87,7 +87,6 @@ export default function VacantRooms() {
 
   return (
     <div className="vacant-rooms-layout">
-      {/* Use the standard component header */}
       <div className="component-header">
         <div className="component-header-left">
           <h2 className="component-header-title">Hostel Room Vacancy</h2>
@@ -96,7 +95,6 @@ export default function VacantRooms() {
           </p>
         </div>
 
-        {/* Filters are now part of the header, like in other components */}
         <div className="filter-controls">
           <div className="filter-group">
             <label htmlFor="hostel-filter">Hostel</label>
@@ -126,7 +124,6 @@ export default function VacantRooms() {
         </div>
       </div>
 
-      {/* Room Grid */}
       {loading ? (
         <div className="component-loading">
           <div className="loading-spinner"></div>

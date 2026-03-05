@@ -116,7 +116,6 @@ export default function Feedback() {
 
         <form className="feedback-form" onSubmit={handleSubmit}>
           
-          {/* Personal Details Section */}
           <div className="form-section-label">Personal Details</div>
           <div className="form-grid">
             <div className="form-group">
@@ -173,7 +172,6 @@ export default function Feedback() {
 
           <hr className="form-divider" />
 
-          {/* Feedback Details Section */}
           <div className="form-section-label">Feedback Details</div>
           <div className="form-grid">
             <div className="form-group">

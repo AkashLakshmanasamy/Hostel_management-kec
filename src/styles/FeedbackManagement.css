@@ -1,4 +1,3 @@
-/* src/styles/FeedbackManagement.css */
 .feedback-management-container {
   padding: 24px;
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -328,7 +327,6 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Responsive styles */
 @media (max-width: 968px) {
   .feedback-controls {
     flex-direction: column;

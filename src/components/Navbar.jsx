@@ -37,7 +37,6 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         
-        {/* Branding */}
         <div className="navbar-brand" onClick={() => navigate("/")}>
           <img src={logo} alt="Logo" className="navbar-logo" />
           <div className="brand-text">
@@ -46,14 +45,12 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Hamburger Toggle (Mobile) */}
         <div className={`navbar-toggle ${isMenuOpen ? "open" : ""}`} onClick={toggleMenu}>
           <span className="bar top"></span>
           <span className="bar middle"></span>
           <span className="bar bottom"></span>
         </div>
 
-        {/* Navigation Links & User Actions */}
         <div className={`navbar-menu ${isMenuOpen ? "active" : ""}`}>
           <ul className="nav-links">
             <li><NavLink to="/profile" onClick={closeMenu}>Profile</NavLink></li>

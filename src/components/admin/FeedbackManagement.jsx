@@ -94,7 +94,6 @@ export default function FeedbackManagement() {
 
   return (
     <div className="feedback-layout">
-      {/* Use the standard component header */}
       <div className="component-header">
         <div className="component-header-left">
           <h2 className="component-header-title">Feedback Management</h2>
@@ -133,7 +132,6 @@ export default function FeedbackManagement() {
         </button>
       </div>
 
-      {/* New Stats Grid Section */}
       <div className="stats-grid">
         <div className="stat-card">
           <span className="stat-label">Total</span>
@@ -149,7 +147,6 @@ export default function FeedbackManagement() {
         </div>
       </div>
 
-      {/* Use the standard loading/empty states */}
       {loading ? (
         <div className="component-loading">
           <div className="loading-spinner"></div>
@@ -163,7 +160,6 @@ export default function FeedbackManagement() {
         </div>
       ) : (
         <div className="table-wrapper">
-          {/* Standard table, will be styled by AdminDashboard.css */}
           <table>
             <thead>
               <tr>
@@ -192,13 +188,11 @@ export default function FeedbackManagement() {
                     </div>
                   </td>
                   <td data-label="Urgency">
-                    {/* New inline badge logic */}
                     <span className={`urgency-badge urgency-${feedback.urgency}`}>
                       {feedback.urgency}
                     </span>
                   </td>
                   <td data-label="Status">
-                    {/* Reusing status badges from RoomRequests */}
                     <span className={`status-badge status-${feedback.resolved ? "confirmed" : "pending"}`}>
                       {feedback.resolved ? "Resolved" : "Pending"}
                     </span>

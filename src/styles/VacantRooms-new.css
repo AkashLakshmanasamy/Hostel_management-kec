@@ -1,12 +1,8 @@
-/* src/styles/VacantRooms-new.css */
-/* This file RELIES on AdminDashboard.css for base styles */
 
-/* ---------- 1. COMPONENT LAYOUT & HEADER ---------- */
 .vacant-rooms-layout {
   width: 100%;
 }
 
-/* This component uses the same header as FeedbackManagement */
 .component-header-left {
   display: flex;
   flex-direction: column;
@@ -34,11 +30,9 @@
   color: var(--text-light);
 }
 
-/* ---------- 2. ROOM GRID STYLES ---------- */
 
 .room-grid {
   display: grid;
-  /* Use auto-fill to create a responsive grid */
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1.25rem;
   margin-top: 1.5rem;
@@ -85,7 +79,6 @@
   border: 1px solid transparent;
 }
 
-/* Bed Status Colors */
 .bed-indicator.bed-free {
   background-color: #F0FDF4; /* Green 50 */
   color: #15803D; /* Green 700 */
@@ -98,7 +91,6 @@
   border-color: #FECACA; /* Red 200 */
 }
 
-/* Special style for the admin's own bed */
 .bed-indicator.bed-admin {
   background-color: #EFF6FF; /* Blue 50 */
   color: #1E40AF; /* Blue 800 */
@@ -120,7 +112,6 @@
   color: var(--danger-color);
 }
 
-/* ---------- 3. RESPONSIVE ---------- */
 
 @media (max-width: 640px) {
   .room-grid {

@@ -186,13 +186,11 @@ export default function RoomSelection() {
     <div className="room-selection-page">
       <div className="room-selection-card">
         
-        {/* Header */}
         <div className="room-selection-header">
           <h2>Room Selection</h2>
           <p>Select your preferred hostel, floor, and bed.</p>
         </div>
 
-        {/* Filters */}
         <div className="filter-section">
           <div className="filter-grid">
             <div className="form-group">
@@ -224,7 +222,6 @@ export default function RoomSelection() {
           </div>
         </div>
 
-        {/* Selection Summary */}
         {selected && (
           <div className="selection-summary">
             <div className="summary-content">
@@ -235,7 +232,6 @@ export default function RoomSelection() {
           </div>
         )}
 
-        {/* Grid Area */}
         <div className="grid-area">
           <div className="grid-header-row">
             <h3>{hostel} Hostel - {floor} Floor</h3>
@@ -280,7 +276,6 @@ export default function RoomSelection() {
           )}
         </div>
 
-        {/* Confirm Button */}
         <div className="action-section">
           <button 
             className="submit-btn" 
@@ -295,7 +290,6 @@ export default function RoomSelection() {
           </button>
         </div>
 
-        {/* Success Modal */}
         {showConfirmation && (
           <div className="modal-overlay">
             <div className="confirmation-modal">

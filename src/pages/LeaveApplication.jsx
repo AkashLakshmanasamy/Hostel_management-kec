@@ -119,7 +119,6 @@ export default function LeaveApplication() {
 
         <form className="leave-form" onSubmit={handleSubmit}>
           
-          {/* Section 1: Student Details */}
           <div className="form-section-title">
             <Icon path={ICONS.user} className="section-icon" /> 
             Student Details
@@ -167,7 +166,6 @@ export default function LeaveApplication() {
             </div>
           </div>
 
-          {/* Section 2: Leave Information */}
           <div className="form-divider"></div>
           <div className="form-section-title">
             <Icon path={ICONS.calendar} className="section-icon" />
@@ -190,7 +188,6 @@ export default function LeaveApplication() {
             <textarea id="reason" name="reason" value={formData.reason} onChange={handleChange} rows="3" placeholder="Provide a valid reason..." required></textarea>
           </div>
 
-          {/* Section 3: Contact Info */}
           <div className="form-divider"></div>
           <div className="form-section-title">
             <Icon path={ICONS.phone} className="section-icon" />
@@ -235,7 +232,6 @@ export default function LeaveApplication() {
             </div>
           )}
 
-          {/* Section 4: Signature */}
           <div className="form-divider"></div>
           <div className="form-group full-width">
             <label htmlFor="studentSignature">Student Signature *</label>

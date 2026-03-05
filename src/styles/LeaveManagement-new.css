@@ -1,12 +1,8 @@
-/* src/styles/LeaveManagement-new.css */
-/* This file RELIES on AdminDashboard.css for base styles */
 
-/* ---------- 1. COMPONENT LAYOUT & HEADER ---------- */
 .leave-layout {
   width: 100%;
 }
 
-/* This component uses the same header as FeedbackManagement */
 .component-header-left {
   display: flex;
   flex-direction: column;
@@ -28,7 +24,6 @@
   color: var(--text-light);
 }
 
-/* Secondary button style (for Refresh) */
 .button-secondary {
   background-color: var(--content-bg);
   color: var(--text-secondary);
@@ -45,7 +40,6 @@
   height: 1rem;
 }
 
-/* ---------- 2. MESSAGE ALERT ---------- */
 .component-message {
   padding: 0.75rem 1.25rem;
   border-radius: var(--radius-lg);
@@ -65,7 +59,6 @@
   border-color: #FECACA; /* Red 200 */
 }
 
-/* ---------- 3. STATS GRID (Copied from Feedback) ---------- */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -93,7 +86,6 @@
   color: var(--text-primary);
 }
 
-/* ---------- 4. SIGNATURE CARD SECTION ---------- */
 .card-section {
   background-color: var(--content-card-bg);
   border-radius: var(--radius-lg);
@@ -128,7 +120,6 @@
 .hidden-file-input {
   display: none;
 }
-/* The label is styled as a button using global .button-primary class */
 
 .signature-preview {
   display: flex;
@@ -142,7 +133,6 @@
   height: 1rem;
 }
 
-/* Use the global link style */
 .link-document {
   color: var(--primary-color);
   text-decoration: none;
@@ -153,8 +143,6 @@
   text-decoration: underline;
 }
 
-/* ---------- 5. TABLE CONTENT STYLES ---------- */
-/* Using styles from Feedback/Student components */
 .student-info {
   display: flex;
   flex-direction: column;
@@ -199,7 +187,6 @@
   text-decoration: underline;
 }
 
-/* Row colors */
 tbody tr.row-approved {
   background-color: #F0FDF4; /* Green 50 */
 }
@@ -215,7 +202,6 @@ tbody tr.row-rejected:hover { background-color: #FEE2E2; }
   font-style: italic;
 }
 
-/* ---------- 6. REUSED STYLES (from other components) ---------- */
 .status-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
@@ -258,7 +244,6 @@ tbody tr.row-rejected:hover { background-color: #FEE2E2; }
   opacity: 0.7;
 }
 
-/* ---------- 7. MODAL STYLES (New) ---------- */
 .modal-overlay {
   position: fixed;
   inset: 0; /* top/left/right/bottom = 0 */
@@ -364,7 +349,6 @@ tbody tr.row-rejected:hover { background-color: #FEE2E2; }
   white-space: pre-wrap; /* Respect newlines */
 }
 
-/* ---------- 8. RESPONSIVE (from old CSS) ---------- */
 @media (max-width: 968px) {
   .stats-grid {
     grid-template-columns: 1fr 1fr;

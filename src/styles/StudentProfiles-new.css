@@ -1,7 +1,4 @@
-/* src/styles/StudentProfiles-new.css */
-/* This file RELIES on AdminDashboard.css */
 
-/* ---------- 1. COMPONENT-SPECIFIC LAYOUT ---------- */
 
 .controls-section {
   display: flex;
@@ -9,14 +6,12 @@
   gap: 1rem;
 }
 
-/* Add a wrapper for the search input to contain the icon */
 .search-container {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-/* Style the search icon inside the input */
 .search-container .search-icon {
   position: absolute;
   left: 0.75rem;
@@ -26,14 +21,11 @@
   pointer-events: none; /* So you can click "through" it */
 }
 
-/* Adjust the input padding to make space for the icon */
 .search-container .search-input {
-  /* Use the global input[type="text"] style but add padding */
   padding-left: 2.25rem !important; /* !important to override global */
   max-width: 300px;
 }
 
-/* Style the "Clear search" button */
 .table-info {
   display: flex;
   justify-content: space-between;
@@ -56,14 +48,12 @@
   text-decoration: underline;
 }
 
-/* ---------- 2. COLUMN SELECTOR DROPDOWN ---------- */
 
 .column-selector-container {
   position: relative; /* For a child dropdown */
 }
 
 .column-toggle-btn {
-  /* This is a standard button, but we'll make it lighter */
   background-color: var(--content-bg);
   color: var(--text-secondary);
   border: 1px solid var(--content-border);
@@ -103,7 +93,6 @@
 }
 
 .close-dropdown {
-  /* Reset button styles */
   background: none;
   border: none;
   padding: 0;
@@ -144,7 +133,6 @@
 }
 
 .column-checkbox input[type="checkbox"] {
-  /* Modern checkbox styles */
   appearance: none;
   width: 1rem;
   height: 1rem;
@@ -159,7 +147,6 @@
   background-color: var(--primary-color);
   border-color: var(--primary-color);
 }
-/* Checkmark */
 .column-checkbox input[type="checkbox"]:checked::after {
   content: '✔';
   font-size: 0.7rem;
@@ -176,10 +163,8 @@
   font-weight: 500;
 }
 
-/* ---------- 3. RESPONSIVE ---------- */
 
 @media (max-width: 968px) {
-  /* On mobile, stack the search and column button */
   .controls-section {
     flex-direction: column;
     align-items: stretch; /* Make them full width */
@@ -192,7 +177,6 @@
     position: static; /* Dropdown will be screen-wide */
   }
   .column-dropdown {
-    /* Make it fill the screen on mobile */
     position: fixed;
     top: 50%;
     left: 50%;

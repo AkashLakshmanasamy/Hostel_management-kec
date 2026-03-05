@@ -171,7 +171,6 @@ export default function StudentProfile() {
 
         <form className="profile-form" onSubmit={handleSubmit}>
           
-          {/* Section 1: Personal Info */}
           <div className="form-section-title">
             <Icon path={ICONS.user} className="section-icon" /> Personal Information
           </div>
@@ -205,7 +204,6 @@ export default function StudentProfile() {
             </div>
           </div>
 
-          {/* Section 2: Academic Info */}
           <div className="form-divider"></div>
           <div className="form-section-title">
             <Icon path={ICONS.academic} className="section-icon" /> Academic Details
@@ -245,7 +243,6 @@ export default function StudentProfile() {
             </div>
           </div>
 
-          {/* Section 3: Contact & Parents */}
           <div className="form-divider"></div>
           <div className="form-section-title">
             <Icon path={ICONS.contact} className="section-icon" /> Contact & Parent Info
@@ -296,7 +293,6 @@ export default function StudentProfile() {
             </div>
           </div>
 
-          {/* Section 4: Hostel Info */}
           <div className="form-divider"></div>
           <div className="form-section-title">
             <Icon path={ICONS.family} className="section-icon" /> Hostel Details
@@ -325,14 +321,12 @@ export default function StudentProfile() {
             </div>
           </div>
 
-          {/* Section 5: Documents */}
           <div className="form-divider"></div>
           <div className="form-section-title">
             <Icon path={ICONS.image} className="section-icon" /> Documents Upload
           </div>
           
           <div className="upload-grid">
-            {/* Passport Photo */}
             <div className="upload-card">
               <label>Passport Photo *</label>
               <div className="upload-area">
@@ -346,7 +340,6 @@ export default function StudentProfile() {
               {errors.passportPhoto && <span className="error-text-center">{errors.passportPhoto}</span>}
             </div>
 
-            {/* ID Card */}
             <div className="upload-card">
               <label>ID Card *</label>
               <div className="upload-area">
@@ -360,7 +353,6 @@ export default function StudentProfile() {
               {errors.idCardPhoto && <span className="error-text-center">{errors.idCardPhoto}</span>}
             </div>
 
-            {/* Fees Receipt */}
             <div className="upload-card">
               <label>Fees Receipt *</label>
               <div className="upload-area">

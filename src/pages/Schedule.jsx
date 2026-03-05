@@ -116,7 +116,6 @@ export default function Schedule() {
           <h3 className="day-heading">{selectedDay}'s Menu</h3>
           
           <div className="timeline-container">
-            {/* Morning */}
             <div className="meal-card">
               <div className="meal-header">
                 <div className="meal-title">
@@ -132,7 +131,6 @@ export default function Schedule() {
               </div>
             </div>
 
-            {/* Breakfast */}
             <div className="meal-card">
               <div className="meal-header">
                 <div className="meal-title">
@@ -144,7 +142,6 @@ export default function Schedule() {
               <p className="meal-description">{weeklyMenu[selectedDay].breakfast}</p>
             </div>
 
-            {/* Lunch */}
             <div className="meal-card">
               <div className="meal-header">
                 <div className="meal-title">
@@ -156,7 +153,6 @@ export default function Schedule() {
               <p className="meal-description">{weeklyMenu[selectedDay].lunch}</p>
             </div>
 
-            {/* Evening */}
             <div className="meal-card">
               <div className="meal-header">
                 <div className="meal-title">
@@ -172,7 +168,6 @@ export default function Schedule() {
               </div>
             </div>
 
-            {/* Dinner */}
             <div className="meal-card">
               <div className="meal-header">
                 <div className="meal-title">

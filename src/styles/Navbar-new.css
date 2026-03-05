@@ -1,8 +1,5 @@
-/* src/styles/Navbar-new.css */
 
-/* ---------- VARIABLES ---------- */
 :root {
-  /* Matches your Student Pages Theme */
   --nav-gradient: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
   --nav-text: #ffffff;
   --nav-text-secondary: #cbd5e0;
@@ -13,7 +10,6 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* ---------- NAVBAR CONTAINER ---------- */
 .navbar {
   background: var(--nav-gradient);
   height: var(--nav-height);
@@ -35,7 +31,6 @@
   align-items: center;
 }
 
-/* ---------- BRANDING ---------- */
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -72,7 +67,6 @@
   text-transform: uppercase;
 }
 
-/* ---------- NAVIGATION MENU ---------- */
 .navbar-menu {
   display: flex;
   align-items: center;
@@ -102,7 +96,6 @@
   background-color: var(--nav-hover-bg);
 }
 
-/* Active Link Style (The Pill) */
 .nav-links li a.active {
   color: var(--nav-text);
   background-color: rgba(255, 255, 255, 0.2);
@@ -110,7 +103,6 @@
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-/* ---------- USER ACTIONS ---------- */
 .nav-user-actions {
   display: flex;
   align-items: center;
@@ -146,7 +138,6 @@
   color: #ffffff;
 }
 
-/* ---------- MOBILE TOGGLE (HAMBURGER) ---------- */
 .navbar-toggle {
   display: none;
   flex-direction: column;
@@ -165,7 +156,6 @@
   transition: all 0.3s ease;
 }
 
-/* Hamburger Animation */
 .navbar-toggle.open .top {
   transform: translateY(8.5px) rotate(45deg);
 }
@@ -176,7 +166,6 @@
   transform: translateY(-8.5px) rotate(-45deg);
 }
 
-/* ---------- RESPONSIVE DESIGN ---------- */
 @media (max-width: 968px) {
   .navbar-toggle {
     display: flex;

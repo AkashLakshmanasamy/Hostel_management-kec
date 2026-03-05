@@ -1,4 +1,3 @@
-/* src/pages/Login.css */
 .login-wrapper {
   min-height: 100vh;
   display: flex;
@@ -191,7 +190,6 @@
   text-decoration: underline;
 }
 
-/* Responsive adjustments */
 @media (max-width: 480px) {
   .login-container {
     border-radius: 8px;
@@ -210,9 +208,7 @@
   }
 }
 
-/* Add these to your existing login.css */
 
-/* Enhanced Google button styles */
 .google-btn {
   position: relative;
   transition: all 0.3s ease;
@@ -223,14 +219,12 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Better loading state */
 .google-btn.disabled {
   opacity: 0.8;
   cursor: not-allowed;
   transform: none;
 }
 
-/* Improved error message animation */
 .error-message {
   animation: slideIn 0.3s ease-out;
 }
@@ -246,7 +240,6 @@
   }
 }
 
-/* Enhanced responsive design */
 @media (max-width: 480px) {
   .login-header {
     padding: 20px 16px;
@@ -271,13 +264,11 @@
   }
 }
 
-/* Accessibility improvements */
 .google-btn:focus {
   outline: 2px solid #4299e1;
   outline-offset: 2px;
 }
 
-/* High contrast mode support */
 @media (prefers-contrast: high) {
   .google-btn {
     border: 2px solid currentColor;

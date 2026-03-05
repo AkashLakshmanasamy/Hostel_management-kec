@@ -63,7 +63,6 @@ export default function AdminDashboard() {
     <div className="admin-dashboard">
       <aside className="admin-sidebar">
         <div className="admin-sidebar-header">
-          {/* You can put a logo here */}
           <h2>Hostel Admin</h2>
         </div>
         <nav className="admin-sidebar-nav">
@@ -98,11 +97,9 @@ export default function AdminDashboard() {
       <div className="admin-content-wrapper">
         <header className="admin-content-header">
           <h1>Admin Dashboard</h1>
-          {/* You could add user profile/logout button here */}
         </header>
 
         <main className="admin-tab-content">
-          {/* This is where the magic happens! Functionality is preserved. */}
           {renderTab()}
         </main>
       </div>

@@ -148,7 +148,6 @@ export default function RoomRequests() {
                     <span className="bed-badge">{r.bed_number}</span>
                   </td>
                   <td data-label="Status">
-                    {/* Simplified status badge logic */}
                     <span className={`status-badge status-${r.status}`}>
                       {r.status}
                     </span>

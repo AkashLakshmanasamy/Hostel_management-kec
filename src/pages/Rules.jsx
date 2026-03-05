@@ -34,7 +34,6 @@ export default function Rules() {
 
         <div className="rules-body">
           
-          {/* Section 1: General Rules */}
           <div className="rules-section">
             <div className="section-title">
               <Icon path={ICONS.list} className="section-icon" />
@@ -58,7 +57,6 @@ export default function Rules() {
             </div>
           </div>
 
-          {/* Section 2: Timings (Grid Layout) */}
           <div className="grid-2-col">
             <div className="rules-section">
               <div className="section-title">
@@ -117,7 +115,6 @@ export default function Rules() {
             </div>
           </div>
 
-          {/* Section 3: Prohibited Items */}
           <div className="rules-section">
             <div className="section-title">
               <Icon path={ICONS.ban} className="section-icon" />
@@ -154,7 +151,6 @@ export default function Rules() {
             </div>
           </div>
 
-          {/* Section 4: Consequences */}
           <div className="rules-section no-border">
             <div className="section-title">
               <Icon path={ICONS.warning} className="section-icon" />

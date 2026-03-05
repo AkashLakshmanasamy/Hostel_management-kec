@@ -94,7 +94,6 @@ export default function StudentProfiles() {
 
   return (
     <div className="student-profiles-layout">
-      {/* Use the standard header class from RoomRequests */}
       <div className="component-header">
         <h2 className="component-header-title">Student Profiles</h2>
         
@@ -109,7 +108,6 @@ export default function StudentProfiles() {
               onKeyPress={handleSearch}
               className="search-input"
             />
-            {/* The primary input is already styled, we just add the icon */}
           </div>
           
           <div className="column-selector-container">
@@ -149,7 +147,6 @@ export default function StudentProfiles() {
         </div>
       </div>
 
-      {/* Use the standard loading class */}
       {loading ? (
         <div className="component-loading">
           <div className="loading-spinner"></div>
@@ -181,7 +178,6 @@ export default function StudentProfiles() {
             )}
           </div>
           <div className="table-scroll-wrapper">
-            {/* Standard table, will be styled by AdminDashboard.css */}
             <table>
               <thead>
                 <tr>

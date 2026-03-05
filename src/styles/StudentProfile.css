@@ -1,7 +1,5 @@
-/* src/styles/StudentProfile.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-/* Base Styles */
 body {
   background-color: #f0f2f5;
   font-family: 'Poppins', sans-serif;
@@ -17,7 +15,6 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* Header */
 .header-section {
   text-align: center;
   margin-bottom: 2.5rem;
@@ -36,7 +33,6 @@ body {
   color: #616161;
 }
 
-/* Form Structure */
 .student-profile-form {
   display: flex;
   flex-direction: column;
@@ -82,7 +78,6 @@ label {
   color: #424242;
 }
 
-/* Form Inputs */
 input,
 select,
 textarea {
@@ -115,7 +110,6 @@ textarea {
   opacity: 0.8;
 }
 
-/* Error & Success Messages */
 .error {
   border-color: #e57373 !important;
   background-color: #fdeaea !important;
@@ -163,7 +157,6 @@ textarea {
   opacity: 1;
 }
 
-/* Document Uploads */
 .documents-grid {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
@@ -223,7 +216,6 @@ textarea {
   transform: translateY(-2px);
 }
 
-/* Submit Button */
 .form-actions {
   text-align: center;
   margin-top: 2rem;
@@ -258,7 +250,6 @@ textarea {
   box-shadow: none;
 }
 
-/* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .student-profile-container {
     padding: 1rem;

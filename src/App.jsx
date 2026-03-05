@@ -26,7 +26,6 @@ function AppRoutes() {
 
   return (
     <Routes>
-      {/* 🔑 Login Route */}
       <Route
         path="/login"
         element={
@@ -41,7 +40,6 @@ function AppRoutes() {
         }
       />
 
-      {/* ================== STUDENT ROUTES ================== */}
       <Route
         path="/profile"
         element={
@@ -91,7 +89,6 @@ function AppRoutes() {
         }
       />
 
-      {/* ================== ADMIN ROUTES ================== */}
       <Route
         path="/admin-dashboard"
         element={
@@ -101,7 +98,6 @@ function AppRoutes() {
         }
       />
 
-      {/* 🔀 Default Route */}
       <Route
         path="/"
         element={
@@ -116,7 +112,6 @@ function AppRoutes() {
         }
       />
 
-      {/* ❌ Catch-all Route */}
       <Route
         path="*"
         element={
@@ -145,7 +140,6 @@ function AppContent() {
 
   return (
     <>
-      {/* ✅ Show Navbar only for students */}
       {user && user.role === "student" && <Navbar />}
       <div
         style={{
